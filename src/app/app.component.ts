@@ -8,7 +8,7 @@ import { first, map } from 'rxjs';
   selector: 'atp-root',
   imports: [RouterOutlet],
   template: `
-    <button (click)="auth.loginWithRedirect()">Log in</button>
+    <!-- <a href="https://www.vecteezy.com/free-vector/garage-background">Garage Background Vectors by Vecteezy</a> -->
     <router-outlet />
   `,
   styles: `
@@ -16,17 +16,5 @@ import { first, map } from 'rxjs';
   `
 })
 export class AppComponent {
-  auth = inject(AuthService);
-
-  user: Signal<User | null | undefined> = toSignal(this.auth.user$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map', u);
-      return u;
-    })
-  ));
-
-  constructor(){
-    console.log('user', this.user);
-  }
+  
 }

@@ -1,8 +1,5 @@
-import { Component, inject, Signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService, User } from '@auth0/auth0-angular';
-import { first, map } from 'rxjs';
 
 @Component({
   selector: 'atp-root',
@@ -16,5 +13,5 @@ import { first, map } from 'rxjs';
   `
 })
 export class AppComponent {
-  
+
 }

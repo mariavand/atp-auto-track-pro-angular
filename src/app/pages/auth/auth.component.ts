@@ -27,27 +27,4 @@ export class AuthComponent {
       return u;
     })
   ));
-
-  test = toSignal(this.authService.isLoading$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map, test', u);
-      return u;
-    })
-  ));
-
-  test2 = toSignal(this.authService.idTokenClaims$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map, test2', u);
-      return u;
-    })
-  ));
-
-  constructor(){
-    console.log('user', this.user());
-    console.log('test', this.test());
-    console.log('test2', this.test2());
-  }
-
 }

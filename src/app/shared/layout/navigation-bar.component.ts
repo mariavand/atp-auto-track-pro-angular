@@ -1,5 +1,5 @@
 import { Component, inject, Signal } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { first, map } from "rxjs";
 
@@ -15,8 +15,12 @@ import { first, map } from "rxjs";
         </div>
         <nav class="navigation__nav">
             <ul class="navigation__list">
+              @if(!isAuthenticated()){
                 <li class="navigation__item"><button class="navigation__btn">Get In!</button></li>
+              }
+              @else {
                 <li class="navigation__item">Welcome, <button class="navigation__btn">{{ user()?.name }} </button></li>
+              }
             </ul>
         </nav>
       </div>
@@ -30,6 +34,10 @@ export class NavigationBarComponent {
 
   user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(
     first(),
+  ));
+
+  isAuthenticated = toSignal(this.authService.isAuthenticated$.pipe(
+    takeUntilDestroyed(),
   ));
 
 }

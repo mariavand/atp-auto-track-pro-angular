@@ -1,10 +1,15 @@
 import { Routes } from '@angular/router';
-import { InitialComponent } from './pages/initial.component';
+import { AuthComponent } from './pages/auth/auth.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: InitialComponent,
+    component: AuthComponent,
+    title: 'Authentication Page'
+  },
+  {
+    path: '/system',
+    loadComponent: () => import('./pages/system/system.component').then(m => m.SystemComponent),
     title: 'Home Page'
   }
 ];

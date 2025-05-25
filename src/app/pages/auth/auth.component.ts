@@ -4,14 +4,14 @@ import { AuthService, User } from '@auth0/auth0-angular';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'atp-initial',
+  selector: 'atp-auth',
   imports: [],
   template: `
     <button (click)="auth.loginWithRedirect()">Log in</button>
   `,
   styles: ``
 })
-export class InitialComponent {
+export class AuthComponent {
 
   auth = inject(AuthService);
 

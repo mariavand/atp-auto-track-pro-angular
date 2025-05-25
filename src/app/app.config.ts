@@ -1,8 +1,9 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import { provideAuth0 } from '@auth0/auth0-angular';
+import { AuthHttpInterceptor, provideAuth0 } from '@auth0/auth0-angular';
+import { environment } from './environments/environment.prod';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +14,20 @@ export const appConfig: ApplicationConfig = {
       clientId: 'BDuYiN7T0Qvh1qRAeCJcWYJykZyCXNiI',
       authorizationParams: {
         redirect_uri: window.location.origin
+      },
+      cacheLocation: 'localstorage',
+      useRefreshTokens: true,
+      httpInterceptor: {
+        allowedList: [environment.apiUrl],
       }
-    })
+    }),
+    provideHttpClient(
+      withInterceptorsFromDi()
+    ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor, // Use the class directly
+      multi: true // Essential for providing multiple interceptors
+    }
   ]
 };

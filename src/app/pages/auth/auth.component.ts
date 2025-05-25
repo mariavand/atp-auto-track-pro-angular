@@ -7,15 +7,15 @@ import { map } from 'rxjs';
   selector: 'atp-auth',
   imports: [],
   template: `
-    <button (click)="auth.loginWithRedirect()">Log in</button>
+    <button (click)="authService.loginWithRedirect()">Log in</button>
   `,
   styles: ``
 })
 export class AuthComponent {
 
-  auth = inject(AuthService);
+  authService = inject(AuthService);
 
-  user: Signal<User | null | undefined> = toSignal(this.auth.user$.pipe(
+  user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(
     takeUntilDestroyed(),
     map((u) => {
       console.log('in map', u);
@@ -23,7 +23,7 @@ export class AuthComponent {
     })
   ));
 
-  test = toSignal(this.auth.appState$.pipe(
+  test = toSignal(this.authService.appState$.pipe(
     takeUntilDestroyed(),
     map((u) => {
       console.log('in map, test', u);
@@ -31,7 +31,7 @@ export class AuthComponent {
     })
   ));
 
-  test2 = toSignal(this.auth.idTokenClaims$.pipe(
+  test2 = toSignal(this.authService.idTokenClaims$.pipe(
     takeUntilDestroyed(),
     map((u) => {
       console.log('in map, test', u);

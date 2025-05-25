@@ -2,11 +2,16 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'wfm-root',
+  selector: 'atp-root',
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.sass'
+  template: `
+    <!-- <a href="https://www.vecteezy.com/free-vector/garage-background">Garage Background Vectors by Vecteezy</a> -->
+    <router-outlet />
+  `,
+  styles: `
+
+  `
 })
 export class AppComponent {
-  title = 'atp-auto-track-pro-angular';
+
 }

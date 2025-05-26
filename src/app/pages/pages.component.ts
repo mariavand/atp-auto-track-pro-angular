@@ -9,7 +9,7 @@ import { FooterComponent } from "../shared/layout/footer.component";
   imports: [NavigationBarComponent, RouterOutlet, FooterComponent],
   template: `
     <atp-navigation-bar/>
-    <div>
+    <div class="system-container">
       <router-outlet/>
     </div>
     <atp-footer/>

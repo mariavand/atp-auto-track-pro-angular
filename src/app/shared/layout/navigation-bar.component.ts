@@ -20,6 +20,8 @@ import { first, map } from "rxjs";
               }
               @else {
                 <li class="navigation__item">Welcome, <button class="navigation__btn">{{ user()?.name }} </button></li>
+                <li class="navigation__item"><button class="navigation__btn">My Profile</button></li>
+                <li class="navigation__item"><button class="navigation__btn">Logout</button></li>
               }
             </ul>
         </nav>

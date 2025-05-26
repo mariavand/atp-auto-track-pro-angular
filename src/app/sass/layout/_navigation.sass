@@ -1,7 +1,7 @@
 .navigation
   &__container
-    width: 98.3vw;
-    height: 4rem;
+    width: 98.9vw;
+    height: 6rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -11,12 +11,29 @@
 
   &__logo-box
     img
-      width: 3.5rem;
-      height: 3.5rem;
+      width: 4.5rem;
+      height: 4.5rem;
 
   &__nav
 
   &__list
     display: flex;
-    gap: .5rem;
-    list-style: none;    
+    gap: 1rem;
+    list-style: none;
+
+  &__item
+    color: $light;
+    font-size: 1.8rem;
+
+  &__btn
+    color: $light;
+    padding: .5rem 1rem;
+    background: none;
+    outline: none;
+    border-radius: 15px 0 15px 0;
+    border: none;
+    font-size: 1.8rem;
+    margin: 1px;
+    &:hover
+      margin: 0;
+      border: 1px solid $light;

@@ -12,12 +12,10 @@ export const authGuard: CanActivateFn = (route, state): Observable<boolean | Url
     first(),
     map(isAuthenticated => {
       if(isAuthenticated){
-        console.log('Authenticated', isAuthenticated);
         return router.createUrlTree(['/system']);
       }
       else{
-        console.log('Not Authenticated', isAuthenticated);
-        return router.createUrlTree(['/auth']);
+        return false;
       }
     })
   )

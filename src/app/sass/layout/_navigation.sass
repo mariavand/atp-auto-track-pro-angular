@@ -1,7 +1,7 @@
 .navigation
   &__container
-    width: 98.9vw;
-    height: 6rem;
+    width: 98.2vw;
+    height: 7rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -10,9 +10,19 @@
     background-blend-mode: multiply,multiply;
 
   &__logo-box
-    img
-      width: 4.5rem;
-      height: 4.5rem;
+
+
+  &__logo-image
+    background-image: url('../../assets/images/pinterest_board_photo.png');
+    width: 5rem;
+    height: 5rem;
+    background-size: 100%;
+    border: 1px solid $secondary;
+    border-radius: 15px;
+    box-shadow: 3px 5px 10px $primary;
+    transition: transform .3s;
+    &:hover
+      transform: scale(1.1);
 
   &__nav
 
@@ -34,6 +44,7 @@
     border: none;
     font-size: 1.8rem;
     margin: 1px;
+    cursor: pointer;
     &:hover
       margin: 0;
       border: 1px solid $light;

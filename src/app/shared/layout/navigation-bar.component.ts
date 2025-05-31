@@ -11,7 +11,7 @@ import { first, map } from "rxjs";
     <div class="navigation">
       <div class="navigation__container">
         <div class="navigation__logo-box">
-          <img src="../../assets/images/logo_transparent.png" alt="Logo" class="navigation__logo">
+           <div class="navigation__logo-image"></div>
         </div>
         <nav class="navigation__nav">
             <ul class="navigation__list">

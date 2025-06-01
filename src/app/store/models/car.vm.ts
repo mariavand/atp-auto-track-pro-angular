@@ -1,4 +1,4 @@
-import { AbstractCar } from "./abstract-car.model";
+import { AbstractCar } from "./abstract-car.vm";
 
 export type Car = AbstractCar & {
   readonly model: string;

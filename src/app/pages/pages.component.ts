@@ -18,14 +18,4 @@ import { CarsService } from "../shared/services/cars.service";
   styles: ``
 })
 export class PagesComponent {
-  #carsService = inject(CarsService);
-
-  allCars = this.#carsService.allCars;
-
-  constructor(){
-    effect(() =>{
-      console.log('allCars', this.allCars.value());
-    })
-  }
-
 }

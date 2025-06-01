@@ -6,18 +6,19 @@ import { AppComponent } from './app.component';
 export const routes: Routes = [
   {
     path: '',
-    component: AppComponent,
-    canActivate: [authGuard]
+    redirectTo: 'home',
+    pathMatch: 'full'
   },
   {
-    path: '',
+    path: 'home',
     component: AuthComponent,
-    title: 'Authentication Page'
+    title: 'Home Page'
   },
   {
     path: 'system',
     loadChildren: () => import('./pages/system/system.routes').then(m => m.SYSTEM_ROUTES),
-    title: 'Home Page',
+    canActivate: [authGuard],
+    title: 'System Page',
   },
   {
     path: '**',

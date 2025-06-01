@@ -88,7 +88,7 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              }              
             ],
             "styles": [
               "src/styles.sass"
@@ -101,5 +101,31 @@
   },
   "cli": {
     "analytics": "169fae11-fce7-4163-890d-a98c1f133b97"
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

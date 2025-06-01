@@ -1,53 +1,25 @@
-import { Component, inject, Signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
-import { AuthService, User } from '@auth0/auth0-angular';
-import { map } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'atp-auth',
   imports: [],
   template: `
-    <button (click)="authService.loginWithRedirect()">Log in</button>
+  <section class="about-system">
+    <div class="about-system__container">
+      <div class="about-system__wrapper">
+        <div class="about-system__logo">
+        </div>
+        <div class="about-system__description">
+          <p class="about-system__description__p">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil aut quasi dolore dolores harum omnis laudantium earum expedita eaque, quaerat autem maxime recusandae blanditiis. Ipsa impedit est repudiandae nemo perspiciatis ducimus mollitia et ea, qui dignissimos cumque corrupti illum aut quas, animi, facilis minus eum? Ipsa aliquam repudiandae iure dolorum molestias cumque illo, minima esse, soluta dignissimos fugit, iste unde accusamus dicta ad sit distinctio laboriosam in! Iure dignissimos perferendis natus iusto cupiditate asperiores, harum est modi rem optio iste nulla, qui cum reprehenderit error tempore! Alias nemo dolorum iusto. Accusamus quisquam non molestias perspiciatis commodi laborum praesentium corrupti voluptate!
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
   `,
   styles: ``
 })
 export class AuthComponent {
-
-  authService = inject(AuthService);
-  router = inject(Router);
-
-  user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map', u);
-      if(!!u){
-        this.router.navigate(['/system']);
-      }
-      return u;
-    })
-  ));
-
-  test = toSignal(this.authService.isLoading$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map, test', u);
-      return u;
-    })
-  ));
-
-  test2 = toSignal(this.authService.idTokenClaims$.pipe(
-    takeUntilDestroyed(),
-    map((u) => {
-      console.log('in map, test2', u);
-      return u;
-    })
-  ));
-
-  constructor(){
-    console.log('user', this.user());
-    console.log('test', this.test());
-    console.log('test2', this.test2());
-  }
 
 }

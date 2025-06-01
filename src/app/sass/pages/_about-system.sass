@@ -1,0 +1,34 @@
+.about-system
+  padding-top: 15rem;
+  &__container
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  &__wrapper
+    box-shadow: 5px 8px 15px $primary;
+    display: flex;
+    border-radius: 20px;
+    overflow: hidden;
+
+
+  &__logo
+    background-image: url("../../assets/images/pinterest_board_photo.png");
+    background-size: 95%;
+    width: 50rem;
+    height: 50rem;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%);
+
+  &__description
+    margin-left: -9rem;
+    padding-left: 11rem;
+    padding-right: 2rem;
+    background-color: $secondary;
+    width: 40rem;
+    height: 50rem;
+    
+    &__p
+      padding: 5.5rem 0;
+      font-size: 1.5rem;
+      line-height: 2.8rem;
+      color: $light;

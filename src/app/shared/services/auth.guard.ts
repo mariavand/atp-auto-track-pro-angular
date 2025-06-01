@@ -4,7 +4,7 @@ import { CanActivateFn, Router, UrlTree } from "@angular/router";
 import { AuthService } from "@auth0/auth0-angular";
 import { first, map, Observable } from "rxjs";
 
-export const authGuard: CanActivateFn = (route, state): Observable<boolean | UrlTree> => {
+export const authGuard: CanActivateFn = (route, state): Observable<boolean | UrlTree> | boolean=> {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -12,12 +12,10 @@ export const authGuard: CanActivateFn = (route, state): Observable<boolean | Url
     first(),
     map(isAuthenticated => {
       if(isAuthenticated){
-        console.log('Authenticated', isAuthenticated);
         return router.createUrlTree(['/system']);
       }
       else{
-        console.log('Not Authenticated', isAuthenticated);
-        return router.createUrlTree(['/auth']);
+        return false;
       }
     })
   )

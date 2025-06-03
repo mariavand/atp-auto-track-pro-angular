@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'atp-auth',
@@ -21,5 +25,17 @@ import { Component } from '@angular/core';
   styles: ``
 })
 export class AuthComponent {
+  #authService = inject(AuthService);
+  #router = inject(Router);
+
+  isAuthenticated = toSignal(this.#authService.isAuthenticated$.pipe(
+    tap((s) => {
+      console.log('hgdfd');
+      if(s){
+        console.log('hgdfdretg');
+        this.#router.navigate(['/system']);
+      }
+    })
+  ));
 
 }

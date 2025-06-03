@@ -16,7 +16,7 @@ import { first, map } from "rxjs";
         <nav class="navigation__nav">
             <ul class="navigation__list">
               @if(!isAuthenticated()){
-                <li class="navigation__item"><button class="navigation__btn">Get In!</button></li>
+                <li class="navigation__item"><button class="navigation__btn" (click)="this.authService.loginWithRedirect()">Get In!</button></li>
               }
               @else {
                 <li class="navigation__item">Welcome, <button class="navigation__btn">{{ user()?.name }} </button></li>

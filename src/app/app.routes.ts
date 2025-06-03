@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from './pages/auth/auth.component';
 import { authGuard } from './shared/services/auth.guard';
-import { AppComponent } from './app.component';
 
 export const routes: Routes = [
   {
@@ -16,8 +15,8 @@ export const routes: Routes = [
   },
   {
     path: 'system',
-    loadChildren: () => import('./pages/system/system.routes').then(m => m.SYSTEM_ROUTES),
     canActivate: [authGuard],
+    loadChildren: () => import('./pages/system/system.routes').then(m => m.SYSTEM_ROUTES),
     title: 'System Page',
   },
   {

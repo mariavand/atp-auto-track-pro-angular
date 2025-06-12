@@ -1,6 +1,7 @@
 import { Component, effect, inject } from "@angular/core";
 import { CarsService } from "../../shared/services/cars.service";
 import { Car } from "../../store/models/car.vm";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'atp-cars-table',
@@ -20,12 +21,23 @@ import { Car } from "../../store/models/car.vm";
               </th>
           }
         </tr>
-  
+
         <tr class="table__tr">
           @for(car of cars(); track car){
             @for(key of getCarKeys(); track key){
               <td class="table__td">
-                {{ car[key] }}
+                @if(typeof car[key] === 'boolean'){
+                  {{ car[key] ? 'Yes' : 'No' }}
+                }
+                @else if(isDate(car[key])){
+                  {{ car[key] | date:'dd/MM/YY'}}
+                }
+                @else if(key == 'transmission'){
+                  {{ car[key] == 0 ? 'Manual' : 'Automatical' }}
+                }
+                @else {
+                  {{ car[key] }}
+                }
               </td>
             }
           }
@@ -39,6 +51,7 @@ import { Car } from "../../store/models/car.vm";
     </div>
 
   `,
+  imports: [CommonModule]
 })
 export class CarsTableComponent {
 
@@ -56,6 +69,11 @@ export class CarsTableComponent {
 
   getCarKeys(){
     return Object.keys(this.cars()?.[0] ?? []) as (keyof Car)[];
+  }
+
+  isDate(value: any){
+    console.log(typeof value);
+    return value instanceof Date;
   }
 
 }

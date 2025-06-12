@@ -1,17 +1,32 @@
 .table__wrapper
-  max-width: 185rem;
+  width: 185rem;
+  height: 78rem;
+  overflow-x: auto;
+  overflow-y: clip;
+  margin: 0 auto;
 .table
   background-color: rgba($light, .9);
-  border-radius: 20px;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: $primary;
   overflow: scroll;
+  border-spacing: 0;
+  border: 1px solid adjust-color($primary, $lightness: 15%);
   &__tr
 
   &__th
-    padding: 1rem;
-
+    border-bottom: 2px solid $primary;
 
   &__th, &__td
-    max-width: 25rem;
-    
+    padding: 1rem;
+    white-space: nowrap;
+    text-align: center;
+
+  &__tr
+    &:nth-child(odd)
+      background-color: adjust-color($secondary, $lightness: 35%);
+    &:nth-child(even)
+      background-color: adjust-color($secondary, $lightness: 55%);
+    &:nth-child(1)
+      background-color: adjust-color($primary, $lightness: 35%);
+
+

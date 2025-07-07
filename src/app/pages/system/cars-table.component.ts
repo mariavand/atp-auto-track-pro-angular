@@ -2,56 +2,84 @@ import { Component, effect, inject } from "@angular/core";
 import { CarsService } from "../../shared/services/cars.service";
 import { Car } from "../../store/models/car.vm";
 import { CommonModule } from "@angular/common";
+import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component";
+import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
+import { DeleteSvgComponent } from "../../shared/utilities/svgs/delete-svg.component";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: 'atp-cars-table',
   template: `
 
+    <section class="filters">
+      <div class="filters__input-container">
+
+        <label for="filters-search" class="filters__label-icon">
+          <atp-search-svg/>
+        </label>
+        <input class="filters__search" type="text" id="filter-search">
+      </div>
+    </section>
     <div class="table__wrapper">
       <table class="table">
         <tr class="table__tr">
-          @for(key of getCarKeys(); track key){
-              <th class="table__th">
-                {{ columnMapper[key] }}
-              </th>
-          }
-          @empty {
-              <th class="table__th">
-                #
-              </th>
+          @if(getCarKeys()){
+            <th class="table__th">
+              Actions
+            </th>
+            @for(key of getCarKeys(); track key){
+                <th class="table__th">
+                  {{ columnMapper[key] }}
+                </th>
+            }
+            @empty {
+                <th class="table__th">
+                  #
+                </th>
+            }
           }
         </tr>
 
         <tr class="table__tr">
-          @for(car of cars(); track car){
-            @for(key of getCarKeys(); track key){
+          @if(cars()){
+            @for(car of cars(); track car){
               <td class="table__td">
-                @if(typeof car[key] === 'boolean'){
-                  {{ car[key] ? 'Yes' : 'No' }}
-                }
-                @else if(isDate(car[key])){
-                  {{ car[key] | date:'dd/MM/YY'}}
-                }
-                @else if(key == 'transmission'){
-                  {{ car[key] == 0 ? 'Manual' : 'Automatical' }}
-                }
-                @else {
-                  {{ car[key] }}
-                }
+                <a class="btn btn__icon" [routerLink]="['car', car.carId]">
+                  <atp-view-svg/>
+                </a>
+                <button class="btn btn__icon">
+                  <atp-delete-svg/>
+                </button>
               </td>
+              @for(key of getCarKeys(); track key){
+                <td class="table__td">
+                  @if(typeof car[key] === 'boolean'){
+                    {{ car[key] ? 'Yes' : 'No' }}
+                  }
+                  @else if(isDate(car[key])){
+                    {{ car[key] | date:'dd/MM/yy'}}
+                  }
+                  @else if(key == 'transmission'){
+                    {{ car[key] == 0 ? 'Manual' : 'Automatical' }}
+                  }
+                  @else {
+                    {{ car[key] }}
+                  }
+                </td>
+              }
             }
-          }
-          @empty {
-              <td class="table__td">
-                No cars
-              </td>
+            @empty {
+                <td class="table__td">
+                  No cars
+                </td>
+            }
           }
         </tr>
       </table>
     </div>
 
   `,
-  imports: [CommonModule]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule]
 })
 export class CarsTableComponent {
 
@@ -72,8 +100,13 @@ export class CarsTableComponent {
   }
 
   isDate(value: any){
-    console.log(typeof value);
-    return value instanceof Date;
+    if(typeof value == 'string'){
+      const data = new Date(value);
+      if(data.toString() != 'Invalid Date'){
+        return true;
+      }
+    }
+    return false;
   }
 
 }

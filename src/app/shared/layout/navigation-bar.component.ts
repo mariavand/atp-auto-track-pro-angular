@@ -1,17 +1,18 @@
-import { Component, inject, Signal } from "@angular/core";
+import { Component, inject, output, signal, Signal } from "@angular/core";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { first, map } from "rxjs";
+import { SidebarComponent } from "./sidebar.component";
 
 @Component({
   selector: 'atp-navigation-bar',
   standalone: true,
-  imports: [],
+  imports: [SidebarComponent],
   template: `
     <div class="navigation">
       <div class="navigation__container">
         <div class="navigation__logo-box">
-           <div class="navigation__logo-image"></div>
+           <button class="navigation__logo-image" (click)="openSidebar()"></button>
         </div>
         <nav class="navigation__nav">
             <ul class="navigation__list">
@@ -27,6 +28,11 @@ import { first, map } from "rxjs";
         </nav>
       </div>
     </div>
+
+    <div>
+      <atp-sidebar [(isSidebarOpen)]="isSidebarOpen"/>
+    </div>
+
   `,
   styles: ``
 })
@@ -42,4 +48,13 @@ export class NavigationBarComponent {
     takeUntilDestroyed(),
   ));
 
+  isSidebarOpen = signal(false);
+
+  openSidebar(){
+    this.isSidebarOpen.update(currentStatus => !currentStatus);
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen.set(false);
+  }
 }

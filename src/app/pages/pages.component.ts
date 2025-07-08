@@ -8,11 +8,15 @@ import { FooterComponent } from "../shared/layout/footer.component";
   standalone: true,
   imports: [NavigationBarComponent, RouterOutlet, FooterComponent],
   template: `
-    <atp-navigation-bar/>
+    <div>
+      <atp-navigation-bar/>
+    </div>
     <div class="system-container">
       <router-outlet/>
     </div>
-    <atp-footer/>
+    <div>
+      <atp-footer/>
+    </div>
   `,
   styles: ``
 })

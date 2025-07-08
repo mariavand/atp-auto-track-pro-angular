@@ -1,6 +1,6 @@
 import { Component, effect, inject } from "@angular/core";
 import { CarsService } from "../../shared/services/cars.service";
-import { Car } from "../../store/models/car.vm";
+import { Car } from "../../store/models/car.model";
 import { CommonModule } from "@angular/common";
 import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component";
 import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
@@ -44,7 +44,7 @@ import { RouterModule } from "@angular/router";
           @if(cars()){
             @for(car of cars(); track car){
               <td class="table__td">
-                <a class="btn btn__icon" [routerLink]="['car', car.carId]">
+                <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                   <atp-view-svg/>
                 </a>
                 <button class="btn btn__icon">

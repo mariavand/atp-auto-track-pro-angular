@@ -14,12 +14,8 @@
       border: 1px solid $light;
 
 .btn
-  cursor: pointer;
-  &__icon
-    border: none;
-    background-color: transparent;
-    padding: calc(.5rem + 1px);
-    &:hover
-      padding: .5rem;
-      border-radius: 10px;
-      border: 1px solid $secondary;
+  padding: calc(.5rem + 1px);
+  @include icon-btn
+  &:hover
+    padding: .5rem;
+

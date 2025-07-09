@@ -38,7 +38,7 @@
     "typescript": "~5.8.3"
   },
   "overrides": {
-    "@ngrx/signals": {
+    "@ngrx/store": {
       "@angular/core": "^20.1.0"
     }
   }

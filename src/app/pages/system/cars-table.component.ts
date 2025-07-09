@@ -6,10 +6,12 @@ import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component
 import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
 import { DeleteSvgComponent } from "../../shared/utilities/svgs/delete-svg.component";
 import { RouterModule } from "@angular/router";
+import { CarStore } from "../../store/car.store";
 
 @Component({
   selector: 'atp-cars-table',
   template: `
+  <!-- @let vm = carStore.vm(); -->
 
     <section class="filters">
       <div class="filters__input-container">
@@ -84,6 +86,7 @@ import { RouterModule } from "@angular/router";
 export class CarsTableComponent {
 
   #carsService = inject(CarsService);
+  carStore = inject(CarStore);
 
   cars = this.#carsService.allCars.value;
 

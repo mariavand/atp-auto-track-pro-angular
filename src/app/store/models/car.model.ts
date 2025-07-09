@@ -5,3 +5,7 @@ export type Car = AbstractCar & {
   readonly brand: string;
   readonly year: number;
 }
+
+export type EditableCarFields = Omit<Car, 'carId' | 'model' | 'brand' | 'year'>
+
+export type CarColumnKey = keyof Car;

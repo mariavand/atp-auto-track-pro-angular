@@ -2,20 +2,132 @@ import { patchState, signalStore, withComputed, withHooks, withMethods, withProp
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialCarSlice } from './slices/car.slice';
 import { computed, inject } from '@angular/core';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
+import { Car, CarColumnKey } from './models/car.model';
+import { Router } from '@angular/router';
+import { pipe, switchMap, tap } from 'rxjs';
 export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
   withProps((_) => {
     const carsService = inject(CarsService);
+    const router = inject(Router);
     return {
-      carsService
+      carsService,
+      router
     }
   }),
   withComputed((store) => ({
-    vm: computed(() => buildCarVm())
+    selectedCar: computed(() => {
+      if(store.selectedCarId() == undefined || store.cars() == undefined) return undefined;
+      return store.cars().find(car => car.carId == store.selectedCarId())
+    }),
+    visibleColumns: computed(() => {
+      const allKeys: CarColumnKey[] = Object.keys(store.selectedColumns()) as CarColumnKey[];
+      return allKeys.filter(key => store.selectedColumns()[key]);
+    }),
+    anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
+    isCarSelected: computed(() => !store.selectedCarId()),
   })),
   withMethods(store => ({
+
+    setCars(cars: Car[]){
+      patchState(store, { cars, loading: false, error: undefined })
+    },
+
+    setLoading(loading: boolean){
+      patchState(store, { loading })
+    },
+
+    setError(error: string | undefined){
+      patchState(store, { error, loading: false })
+    },
+
+    setSelectedCarId(id: number | undefined) {
+      patchState(store, { selectedCarId: id });
+    },
+
+    openEditModal(carId: number | undefined = undefined) {
+      patchState(store, { isEditModalOpen: true, selectedCarId: carId });
+    },
+
+    closeEditModal() {
+      patchState(store, { isEditModalOpen: false, selectedCarId: undefined });
+    },
+
+    openHistoryModal(carId: number | undefined) {
+      patchState(store, { isHistoryModalOpen: true, selectedCarId: carId });
+    },
+
+    closeHistoryModal() {
+      patchState(store, { isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined });
+    },
+
+    toggleColumnVisibility(columnName: CarColumnKey) {
+      patchState(store, (currentState) => ({
+        selectedColumns: {
+          ...currentState.selectedColumns,
+          [columnName]: !currentState.selectedColumns[columnName]
+        }
+      }));
+    },
+
+    setCarHistory(history: History[]) {
+      patchState(store, { selectedCarHistory: history, historyLoading: false, historyError: undefined });
+    },
+
+    setHistoryLoading(loading: boolean) {
+      patchState(store, { historyLoading: loading });
+    },
+
+    setHistoryError(error: string | undefined) {
+      patchState(store, { historyError: error, historyLoading: false });
+    },
+
+    addCar(newCar: Car) {
+      patchState(store, (currentState) => ({
+        cars: [...currentState.cars, newCar],
+        isCreating: false,
+        error: undefined
+      }));
+    },
+
+    updateCarInList(updatedCar: Car) {
+      patchState(store, (currentState) => ({
+        cars: currentState.cars.map(car =>
+          car.carId === updatedCar.carId ? updatedCar : car
+        ),
+        isUpdating: false,
+        error: undefined
+      }));
+    },
+
+    removeCarFromList(carId: number) {
+      patchState(store, (currentState) => ({
+        cars: currentState.cars.filter(car => car.carId !== carId),
+        loading: false,
+        error: undefined,
+        selectedCarId: currentState.selectedCarId === carId ? undefined : currentState.selectedCarId
+      }));
+    },
+
+    // --- Effects (Asynchronous operations using rxMethod) ---
+    // Effect to load all cars
+    loadAllCars: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { loading: true, error: undefined })),
+        switchMap(() =>
+          store.carsService.getAllCars().pipe(
+            tapResponse({
+              next: (cars: Car[]) => patchState(store, { cars, loading: false }),
+              error: (err: any) => patchState(store, { error: err.message, loading: false }),
+            })
+          )
+        )
+      )
+    ),
 
   })),
   withHooks((store) => ({

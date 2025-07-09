@@ -1,6 +1,6 @@
 import { HttpClient, httpResource, HttpResourceRef } from "@angular/common/http";
 import { inject, Injectable, resource, ResourceRef, signal } from "@angular/core";
-import { Car } from "../../store/models/car.vm";
+import { Car } from "../../store/models/car.model";
 import { environment } from "../../environments/environment.prod";
 import { first, map } from "rxjs";
 import { rxResource } from "@angular/core/rxjs-interop";
@@ -25,7 +25,7 @@ export class CarsService {
       batteryChangeDate: 'Battery Change Date',
       bluetooth: 'Bluetooth',
       brand: 'Brand',
-      buyingDay: 'BuyingDay',
+      buyingDay: 'Buying Day',
       carId: 'Id',
       color: 'Color',
       editedBy: 'Edited By',
@@ -48,5 +48,9 @@ export class CarsService {
       transmission: 'Transmission',
       year: 'Year'
     }
+  }
+
+  getAllCars(){
+    return this.#http.get<Car[]>(environment.apiUrl + '/cars').pipe(first())
   }
 }

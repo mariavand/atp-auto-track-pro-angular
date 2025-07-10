@@ -9,7 +9,32 @@ import { first, map } from 'rxjs';
   imports: [],
   template: `
   @if(store.selectedCar()){
-    boo
+    <div class="card">
+      <div class="card__header">
+        <h2>General</h2>
+      </div>
+      <div class="card__body">
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <h2>Sales</h2>
+      </div>
+      <div class="card__body">
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__header">
+        <h2>Tech</h2>
+      </div>
+      <div class="card__body">
+
+      </div>
+    </div>
   }
   `,
   styles: [``]

@@ -43,3 +43,7 @@ export function buildVisibleColumns(columns: Record<CarColumnKey, boolean>){
   const allKeys: CarColumnKey[] = Object.keys(columns) as CarColumnKey[];
   return allKeys.filter(key => columns[key]);
 }
+
+export function buildGeneralColumns(){
+  
+}

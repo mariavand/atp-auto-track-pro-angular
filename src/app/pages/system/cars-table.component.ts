@@ -33,7 +33,7 @@ import { CarStore } from "../../store/car.store";
             </th>
             @for(key of store.visibleColumns(); track key){
                 <th class="table__th">
-                  {{ columnMapper[key] }}
+                  {{ store.uiColumnsName()[key] }}
                 </th>
             }
             @empty {

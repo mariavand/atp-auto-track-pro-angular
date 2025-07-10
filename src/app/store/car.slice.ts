@@ -6,7 +6,6 @@ export type CarSlice = {
   readonly error: string | undefined;
   readonly searchWord: string;
   readonly selectedCarId: number | undefined;
-  // readonly selectedCar: Car;
   readonly selectedColumns: Record<CarColumnKey, boolean>;
   readonly isEditModalOpen: boolean;
   readonly isHistoryModalOpen: boolean;
@@ -15,7 +14,10 @@ export type CarSlice = {
   readonly historyError: string| undefined;
   readonly isCreating: boolean;
   readonly isUpdating: boolean;
-
+  readonly carGeneralKeys: (keyof Car)[];
+  readonly carSalesKeys: (keyof Car)[];
+  readonly carTechKeys: (keyof Car)[];
+  readonly uiColumnsName: { [key : string]: string }
 }
 
 
@@ -60,4 +62,35 @@ export const initialCarSlice: CarSlice = {
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
+  carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments'],
+  carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
+  carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
+  uiColumnsName: {
+    airConditioning: 'Air Conditioner',
+    batteryChangeDate: 'Battery Change Date',
+    bluetooth: 'Bluetooth',
+    brand: 'Brand',
+    buyingDay: 'Buying Day',
+    carId: 'Id',
+    color: 'Color',
+    editedBy: 'Edited By',
+    finalPrice: 'Final Price',
+    fuelType: 'Fuel Type',
+    generalComments: 'General Comments',
+    gps: 'GPS',
+    initialPrice: 'Initial Price',
+    lastUpdateDate: 'Last Update Date',
+    lockedBy: 'Locked By',
+    model: 'Model',
+    ownerNameSurname: 'Owner Name & Surname',
+    paymentStatus: 'Payment Status',
+    salesComments: 'Sales Comments',
+    seats: 'Seats',
+    serialNumber: 'Serial Number',
+    softwareVersion: 'Software Version',
+    status: 'Status',
+    techComments: 'Tech Comments',
+    transmission: 'Transmission',
+    year: 'Year'
+  }
 }

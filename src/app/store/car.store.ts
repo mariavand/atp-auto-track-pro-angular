@@ -6,7 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
 import { Car, CarColumnKey } from '../shared/models/car.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { first, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
 import * as vmBuilders from './car-vm.builders';

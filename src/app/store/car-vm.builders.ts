@@ -1,4 +1,4 @@
-import { Car } from "./models/car.model";
+import { Car } from "../shared/models/car.model";
 
 export function buildCarsVm(
   cars: Car[],

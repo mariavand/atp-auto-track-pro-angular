@@ -1,6 +1,6 @@
 import { Component, effect, inject } from "@angular/core";
 import { CarsService } from "../../shared/services/cars.service";
-import { Car } from "../../store/models/car.model";
+import { Car } from "../../shared/models/car.model";
 import { CommonModule } from "@angular/common";
 import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component";
 import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
@@ -43,8 +43,8 @@ import { CarStore } from "../../store/car.store";
         </tr>
 
         <tr class="table__tr">
-          @if(cars()){
-            @for(car of cars(); track car){
+          @if(carStore.cars()){
+            @for(car of carStore.cars(); track car){
               <td class="table__td">
                 <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                   <atp-view-svg/>
@@ -95,6 +95,7 @@ export class CarsTableComponent {
   constructor(){
     effect(() => {
       console.log(this.cars());
+      console.log('carStore', this.carStore.cars());
     })
   }
 

@@ -1,4 +1,4 @@
-import { Car, CarColumnKey } from "../models/car.model"
+import { Car, CarColumnKey } from "../shared/models/car.model"
 
 export type CarSlice = {
   readonly cars: Car[];

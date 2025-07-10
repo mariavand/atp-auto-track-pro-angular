@@ -1,13 +1,15 @@
 import { patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
-import { initialCarSlice } from './slices/car.slice';
+import { initialCarSlice } from './car.slice';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
-import { Car, CarColumnKey } from './models/car.model';
+import { Car, CarColumnKey } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { pipe, switchMap, tap } from 'rxjs';
+import * as updaters from './car.updaters';
+import { buildCarsVm } from './car-vm.builders';
 export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
@@ -20,6 +22,7 @@ export const CarStore = signalStore(
     }
   }),
   withComputed((store) => ({
+    vm: computed(() => buildCarsVm(store.cars(), store.searchWord())),
     selectedCar: computed(() => {
       if(store.selectedCarId() == undefined || store.cars() == undefined) return undefined;
       return store.cars().find(car => car.carId == store.selectedCarId())
@@ -32,7 +35,9 @@ export const CarStore = signalStore(
     isCarSelected: computed(() => !store.selectedCarId()),
   })),
   withMethods(store => ({
-
+    setSearchWord: (searchWord: string) => {
+      patchState(store, updaters.setSearchWord(searchWord))
+    },
     setCars(cars: Car[]){
       patchState(store, { cars, loading: false, error: undefined })
     },
@@ -130,11 +135,9 @@ export const CarStore = signalStore(
     ),
 
   })),
-  withHooks((store) => ({
+  withHooks(({ loadAllCars }) => ({
     onInit: () => {
-      const allCars = store.carsService.allCars.value();
-      console.log(allCars);
-      patchState(store, { cars: allCars })
+      loadAllCars();
     }
   })),
   withDevtools('cars-store')

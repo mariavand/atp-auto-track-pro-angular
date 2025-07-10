@@ -11,7 +11,7 @@ import { CarStore } from "../../store/car.store";
 @Component({
   selector: 'atp-cars-table',
   template: `
-  @let vm = carStore.vm();
+  @let vm = store.vm();
 
     <section class="filters">
       <div class="filters__input-container">
@@ -19,7 +19,9 @@ import { CarStore } from "../../store/car.store";
         <label for="filters-search" class="filters__label-icon">
           <atp-search-svg/>
         </label>
-        <input class="filters__search" type="text" id="filter-search" (keyup)="carStore.setSearchWord($event.target)">
+        <input class="filters__search" type="text" id="filter-search" (keyup)="store.setSearchWord($event.target)">
+
+
       </div>
     </section>
     <div class="table__wrapper">
@@ -46,7 +48,7 @@ import { CarStore } from "../../store/car.store";
           @if(vm.filteredCars.length){
             @for(car of vm.filteredCars; track car){
               <td class="table__td">
-                <a class="link btn link__icon" [routerLink]="['car', car.carId]">
+                <a class="link btn link__icon" (click)="store.setSelectedCarId(car.carId)" [routerLink]="['car', car.carId]">
                   <atp-view-svg/>
                 </a>
                 <button class="btn btn__icon">
@@ -86,7 +88,7 @@ import { CarStore } from "../../store/car.store";
 export class CarsTableComponent {
 
   #carsService = inject(CarsService);
-  carStore = inject(CarStore);
+  store = inject(CarStore);
 
   cars = this.#carsService.allCars.value;
 
@@ -95,7 +97,7 @@ export class CarsTableComponent {
   constructor(){
     effect(() => {
       console.log(this.cars());
-      console.log('carStore', this.carStore);
+      console.log('store', this.store);
     })
   }
 

@@ -9,7 +9,7 @@ import { Car, CarColumnKey } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
-import { buildCarsVm } from './car-vm.builders';
+import * as vmBuilders from './car-vm.builders';
 export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
@@ -22,17 +22,11 @@ export const CarStore = signalStore(
     }
   }),
   withComputed((store) => ({
-    vm: computed(() => buildCarsVm(store.cars, store.searchWord)),
-    selectedCar: computed(() => {
-      if(store.selectedCarId() == undefined || store.cars() == undefined) return undefined;
-      return store.cars().find(car => car.carId == store.selectedCarId())
-    }),
-    visibleColumns: computed(() => {
-      const allKeys: CarColumnKey[] = Object.keys(store.selectedColumns()) as CarColumnKey[];
-      return allKeys.filter(key => store.selectedColumns()[key]);
-    }),
+    vm: computed(() => vmBuilders.buildCarsVm(store.cars(), store.searchWord())),
+    selectedCar: computed(() => vmBuilders.buildSelectedCar(store.selectedCarId(), store.cars())),
+    visibleColumns: computed(() => vmBuilders.buildVisibleColumns(store.selectedColumns())),
     anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
-    isCarSelected: computed(() => !store.selectedCarId()),
+    // isCarSelected: computed(() => !store.selectedCarId()),
   })),
   withMethods(store => ({
     setSearchWord: (target: any) => {

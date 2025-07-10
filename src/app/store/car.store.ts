@@ -6,7 +6,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
 import { Car, CarColumnKey } from '../shared/models/car.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
 import * as vmBuilders from './car-vm.builders';
@@ -48,8 +48,8 @@ export const CarStore = signalStore(
       patchState(store, { error, loading: false })
     },
 
-    setSelectedCarId(id: number | undefined) {
-      patchState(store, { selectedCarId: id });
+    setSelectedCarId(id: number | undefined | null) {
+      patchState(store, { selectedCarId: id == null ? undefined : id });
     },
 
     openEditModal(carId: number | undefined = undefined) {

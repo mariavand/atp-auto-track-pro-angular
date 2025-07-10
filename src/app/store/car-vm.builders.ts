@@ -35,7 +35,7 @@ export function buildCarsVm(
 }
 
 export function buildSelectedCar(carId: number | undefined, cars: Car[]){
-  if(carId == undefined || cars == undefined) return undefined;
+  if(carId == undefined || carId == null || cars == undefined) return undefined;
   return cars.find(car => car.carId == carId);
 }
 

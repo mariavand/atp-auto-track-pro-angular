@@ -44,11 +44,11 @@ import { CarStore } from "../../store/car.store";
 
         <tr class="table__tr">
           @if(vm.filteredCars.length){
-            @for(car of vm.filteredCars; track car.carId){
+            @for(car of vm.filteredCars; track car){
               <td class="table__td">
-                <a class="link btn link__icon" [routerLink]="['car', car.carId]">
+                <!-- <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                   <atp-view-svg/>
-                </a>
+                </a> -->
                 <button class="btn btn__icon">
                   <atp-delete-svg/>
                 </button>

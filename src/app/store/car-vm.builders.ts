@@ -14,24 +14,29 @@ export function buildCarsVm(
     const word = searchWord().trim().toLowerCase();
     let res: Car[] = [];
 
-    if(word != ''){
-      return cars().forEach(car => {
+    console.log('word', word);
+
+    if(searchWord() != ''){
+      cars().forEach(car => {
         let keys =  Object.keys(car);
-        console.log('boo');
+        console.log('boo', word);
         keys.forEach(k => {
           let value = car[k as keyof Car];
+          console.log('value', value);
           if(value.toString().toLowerCase().includes(word)){
+            console.log('res.find((val) => val.carId == car.carId', res.find((val) => val.carId == car.carId))
+            console.log('value', value);
             if(res.find((val) => val.carId == car.carId) == undefined){
               res = [...res, car];
             }
           }
         });
         console.log('buildFilteredCarsList', res);
-        return res;
       })
+      return res;
     }
     else{
-      return cars()
+      return cars();
     }
   }
 

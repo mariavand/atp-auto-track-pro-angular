@@ -22,7 +22,7 @@ export const CarStore = signalStore(
     }
   }),
   withComputed((store) => ({
-    vm: computed(() => buildCarsVm(store.cars(), store.searchWord())),
+    vm: computed(() => buildCarsVm(store.cars, store.searchWord)),
     selectedCar: computed(() => {
       if(store.selectedCarId() == undefined || store.cars() == undefined) return undefined;
       return store.cars().find(car => car.carId == store.selectedCarId())
@@ -35,8 +35,8 @@ export const CarStore = signalStore(
     isCarSelected: computed(() => !store.selectedCarId()),
   })),
   withMethods(store => ({
-    setSearchWord: (searchWord: string) => {
-      patchState(store, updaters.setSearchWord(searchWord))
+    setSearchWord: (target: any) => {
+      patchState(store, updaters.setSearchWord(target.value))
     },
     setCars(cars: Car[]){
       patchState(store, { cars, loading: false, error: undefined })

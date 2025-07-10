@@ -8,4 +8,4 @@ export type Car = AbstractCar & {
 
 export type EditableCarFields = Omit<Car, 'carId' | 'model' | 'brand' | 'year'>
 
-export type CarColumnKey = keyof Car;
+export type CarColumnKey = Exclude<keyof Car, 'lockedBy'>;

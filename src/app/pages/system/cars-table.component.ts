@@ -27,11 +27,11 @@ import { CarStore } from "../../store/car.store";
     <div class="table__wrapper">
       <table class="table">
         <tr class="table__tr">
-          @if(getCarKeys()){
+          @if(store.visibleColumns()){
             <th class="table__th">
               Actions
             </th>
-            @for(key of getCarKeys(); track key){
+            @for(key of store.visibleColumns(); track key){
                 <th class="table__th">
                   {{ columnMapper[key] }}
                 </th>
@@ -55,7 +55,7 @@ import { CarStore } from "../../store/car.store";
                   <atp-delete-svg/>
                 </button>
               </td>
-              @for(key of getCarKeys(); track key){
+              @for(key of store.visibleColumns(); track key){
                 <td class="table__td">
                   @if(typeof car[key] === 'boolean'){
                     {{ car[key] ? 'Yes' : 'No' }}
@@ -90,19 +90,17 @@ export class CarsTableComponent {
   #carsService = inject(CarsService);
   store = inject(CarStore);
 
-  cars = this.#carsService.allCars.value;
-
   columnMapper: { [key : string]: string } = this.#carsService.allColumnsNamesMapper;
 
   constructor(){
     effect(() => {
-      console.log(this.cars());
+      console.log(this.store.cars());
       console.log('store', this.store);
     })
   }
 
   getCarKeys(){
-    return Object.keys(this.cars()?.[0] ?? []) as (keyof Car)[];
+    return Object.keys(this.store.cars()?.[0] ?? []) as (keyof Car)[];
   }
 
   isDate(value: any){

@@ -34,7 +34,6 @@ export const initialCarSlice: CarSlice = {
     buyingDay: true,
     editedBy: true,
     lastUpdateDate: true,
-    lockedBy: true,
     generalComments: true,
     salesComments: true,
     batteryChangeDate: true,

@@ -7,18 +7,22 @@ import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
 import { Car, CarColumnKey } from '../shared/models/car.model';
 import { Router } from '@angular/router';
-import { pipe, switchMap, tap } from 'rxjs';
+import { first, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
 import * as vmBuilders from './car-vm.builders';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment.prod';
 export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
   withProps((_) => {
     const carsService = inject(CarsService);
     const router = inject(Router);
+    const http = inject(HttpClient);
     return {
       carsService,
-      router
+      router,
+      http
     }
   }),
   withComputed((store) => ({
@@ -118,7 +122,8 @@ export const CarStore = signalStore(
       pipe(
         tap(() => patchState(store, { loading: true, error: undefined })),
         switchMap(() =>
-          store.carsService.getAllCars().pipe(
+          store.http.get<Car[]>(environment.apiUrl + '/cars').pipe(
+            first(),
             tapResponse({
               next: (cars: Car[]) => patchState(store, { cars, loading: false }),
               error: (err: any) => patchState(store, { error: err.message, loading: false }),

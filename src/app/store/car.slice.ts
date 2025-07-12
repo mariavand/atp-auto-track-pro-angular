@@ -17,7 +17,7 @@ export type CarSlice = {
   readonly carGeneralKeys: (keyof Car)[];
   readonly carSalesKeys: (keyof Car)[];
   readonly carTechKeys: (keyof Car)[];
-  readonly uiColumnsName: { [key : string]: string }
+  readonly allColumnsNamesMapper: { [key : string]: string }
 }
 
 
@@ -65,7 +65,7 @@ export const initialCarSlice: CarSlice = {
   carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
   carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
-  uiColumnsName: {
+  allColumnsNamesMapper: {
     airConditioning: 'Air Conditioner',
     batteryChangeDate: 'Battery Change Date',
     bluetooth: 'Bluetooth',

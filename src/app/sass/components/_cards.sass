@@ -1,12 +1,23 @@
 .card
   border-radius: 15px;
+  border: 1px solid $secondary;
+  box-shadow: 10px  10px 40px $secondary;
   overflow: hidden;
   height: fit-content;
   margin: 2rem;
+  padding: 0 5rem;
+  transform: skew(-10deg);
+  background-color: rgba($light, .7);
+  background-image: linear-gradient(to bottom right, rgba($secondary, .55), rgba($light, .7));
   &__header
     background-color: $primary;
+    background-image: linear-gradient(to right, rgba($teal, .6), rgba($primary, .9));
     color: $light;
-    padding: .5rem 1rem;
+    padding: .5rem 1.3rem;
+    margin: 0 -5.5rem;
+    transform: skew(10deg);
   &__body
-    background-color: $light;
+    transform: skew(10deg);
     color: $secondary;
+    background-color: transparent;
+    padding: .5rem 1rem;

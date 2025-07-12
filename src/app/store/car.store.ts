@@ -116,6 +116,16 @@ export const CarStore = signalStore(
       }));
     },
 
+    isDate(value: any){
+      if(typeof value == 'string'){
+        const data = new Date(value);
+        if(data.toString() != 'Invalid Date'){
+          return true;
+        }
+      }
+      return false;
+    },
+
     // --- Effects (Asynchronous operations using rxMethod) ---
     // Effect to load all cars
     loadAllCars: rxMethod<void>(

@@ -3,16 +3,25 @@ import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { first, map } from "rxjs";
 import { SidebarComponent } from "./sidebar.component";
+import { SliderSvgComponent } from "../utilities/svgs/slider-svg.component";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'atp-navigation-bar',
   standalone: true,
-  imports: [SidebarComponent],
+  imports: [SidebarComponent, SliderSvgComponent],
   template: `
     <div class="navigation">
       <div class="navigation__container">
-        <div class="navigation__logo-box">
-           <button class="navigation__logo-image" (click)="openSidebar()"></button>
+        <div class="d-flex">
+          <div class="navigation__logo-box">
+             <button class="navigation__logo-image"></button>
+            </div>
+            @if(isAuthenticated()){
+             <button class="btn btn__icon btn__brd-light" (click)="openSidebar()">
+               <atp-slider-svg [stroke]="'#F3F3F3'"/>
+             </button>
+            }
         </div>
         <nav class="navigation__nav">
             <ul class="navigation__list">
@@ -39,16 +48,23 @@ import { SidebarComponent } from "./sidebar.component";
 export class NavigationBarComponent {
 
   authService = inject(AuthService);
+  #route = inject(ActivatedRoute);
+  #router = inject(Router);
 
-  user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(
-    first(),
-  ));
+  user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(first()));
 
-  isAuthenticated = toSignal(this.authService.isAuthenticated$.pipe(
-    takeUntilDestroyed(),
-  ));
+  isAuthenticated = toSignal(this.authService.isAuthenticated$.pipe(takeUntilDestroyed()));
 
   isSidebarOpen = signal(false);
+
+
+  url = toSignal(this.#router.events.pipe(
+    takeUntilDestroyed(),
+    map((url) => {
+      console.log('url', url);
+      return url;
+    })
+  ));
 
   openSidebar(){
     this.isSidebarOpen.update(currentStatus => !currentStatus);

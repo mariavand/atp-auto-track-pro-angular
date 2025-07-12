@@ -11,8 +11,6 @@
   overflow: scroll;
   border-spacing: 0;
   border: 1px solid adjust-color($primary, $lightness: 15%);
-  &__tr
-
   &__th
     border-bottom: 2px solid $primary;
 
@@ -27,6 +25,9 @@
     &:nth-child(even)
       background-color: adjust-color($secondary, $lightness: 55%);
     &:nth-child(1)
-      background-color: adjust-color($primary, $lightness: 35%);
+      background-color: $primary;
+      background-image: linear-gradient(to right, rgba($teal, .6), rgba($primary, .9), rgba($teal, .6), rgba($primary, .9));
+      color: $light;
     &:hover:not(:nth-child(1))
-      background-color: adjust-color($secondary, $lightness: 45%);
+      background-color: rgba($light, .7);
+      background-image: linear-gradient(to top, rgba($teal, .2), rgba($light, .7));

@@ -25,11 +25,11 @@ import { CarStore } from "../../store/car.store";
     <div class="table__wrapper">
       <table class="table">
         <tr class="table__tr">
-          @if(store.visibleColumns()){
+          @if(vm.visibleColumns){
             <th class="table__th">
               Actions
             </th>
-            @for(key of store.visibleColumns(); track key){
+            @for(key of vm.visibleColumns; track key){
                 <th class="table__th">
                   {{ store.allColumnsNamesMapper()[key] }}
                 </th>
@@ -52,7 +52,7 @@ import { CarStore } from "../../store/car.store";
                 <atp-delete-svg/>
               </button>
             </td>
-            @for(key of store.visibleColumns(); track key){
+            @for(key of vm.visibleColumns; track key){
               <td class="table__td">
                 @if(typeof car[key] === 'boolean'){
                   {{ car[key] ? 'Yes' : 'No' }}

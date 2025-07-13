@@ -1,4 +1,3 @@
-import { Signal } from "@angular/core";
 import { Car, CarColumnKey } from "../shared/models/car.model";
 import { CarVM } from "./car.vm";
 
@@ -12,10 +11,10 @@ export function buildCarsVm(
   };
 
   function buildFilteredCarsList(){
-    const word = store.searchWord.trim().toLowerCase();
+    const word = store.searchWord().trim().toLowerCase();
     let res: Car[] = [];
 
-    if(store.searchWord != ''){
+    if(store.searchWord() != ''){
       store.cars().forEach((car: Car) => {
         let keys =  Object.keys(car);
         keys.forEach(k => {

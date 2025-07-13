@@ -9,9 +9,9 @@ import { Car, CarColumnKey } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { first, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
-import * as vmBuilders from './car-vm.builders';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
+import { buildCarsVm } from './car-vm.builders';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -27,7 +27,7 @@ export const CarStore = signalStore(
     }
   }),
   withComputed((store) => ({
-    vm: computed(() => vmBuilders.buildCarsVm(store)),
+    vm: computed(() => buildCarsVm(store)),
     // anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
   })),
   withMethods(store => ({

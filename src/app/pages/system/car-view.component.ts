@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'atp-car-view',
   imports: [CommonModule],
   template: `
-  @let car = store.selectedCar();
+  @let car = store.vm().selectedCar;
   @if(car){
     <div class="container">
       <div class="card">

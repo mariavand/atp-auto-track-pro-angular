@@ -12,6 +12,7 @@ import * as updaters from './car.updaters';
 import * as vmBuilders from './car-vm.builders';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
+
 export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
@@ -26,11 +27,8 @@ export const CarStore = signalStore(
     }
   }),
   withComputed((store) => ({
-    vm: computed(() => vmBuilders.buildCarsVm(store.cars(), store.searchWord())),
-    selectedCar: computed(() => vmBuilders.buildSelectedCar(store.selectedCarId(), store.cars())),
-    visibleColumns: computed(() => vmBuilders.buildVisibleColumns(store.selectedColumns())),
-    anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
-    // isCarSelected: computed(() => !store.selectedCarId()),
+    vm: computed(() => vmBuilders.buildCarsVm(store)),
+    // anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
   })),
   withMethods(store => ({
     setSearchWord: (target: any) => {

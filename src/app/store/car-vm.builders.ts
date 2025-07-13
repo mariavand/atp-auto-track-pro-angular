@@ -1,20 +1,22 @@
 import { Signal } from "@angular/core";
 import { Car, CarColumnKey } from "../shared/models/car.model";
+import { CarVM } from "./car.vm";
 
 export function buildCarsVm(
-  cars: Car[],
-  searchWord: string
-){
+  store: any
+): CarVM{
   return {
-    filteredCars: buildFilteredCarsList() ?? []
+    filteredCars: buildFilteredCarsList() ?? [],
+    selectedCar: buildSelectedCar(store.selectedCarId(), store.cars()) ?? {} as Car,
+    visibleColumns: buildVisibleColumns(store.selectedColumns())
   };
 
   function buildFilteredCarsList(){
-    const word = searchWord.trim().toLowerCase();
+    const word = store.searchWord.trim().toLowerCase();
     let res: Car[] = [];
 
-    if(searchWord != ''){
-      cars.forEach(car => {
+    if(store.searchWord != ''){
+      store.cars().forEach((car: Car) => {
         let keys =  Object.keys(car);
         keys.forEach(k => {
           let value = car[k as keyof Car];
@@ -28,22 +30,18 @@ export function buildCarsVm(
       return res;
     }
     else{
-      return cars;
+      return store.cars();
     }
   }
 
+  function buildSelectedCar(carId: number | undefined, cars: Car[]){
+    if(carId == undefined || carId == null || cars == undefined) return undefined;
+    return cars.find(car => car.carId == carId);
+  }
+
+  function buildVisibleColumns(columns: Record<CarColumnKey, boolean>){
+    const allKeys: CarColumnKey[] = Object.keys(columns) as CarColumnKey[];
+    return allKeys.filter(key => columns[key]);
+  }
 }
 
-export function buildSelectedCar(carId: number | undefined, cars: Car[]){
-  if(carId == undefined || carId == null || cars == undefined) return undefined;
-  return cars.find(car => car.carId == carId);
-}
-
-export function buildVisibleColumns(columns: Record<CarColumnKey, boolean>){
-  const allKeys: CarColumnKey[] = Object.keys(columns) as CarColumnKey[];
-  return allKeys.filter(key => columns[key]);
-}
-
-export function buildGeneralColumns(){
-  
-}

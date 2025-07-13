@@ -27,7 +27,6 @@ export const initialCarSlice: CarSlice = {
   error: undefined,
   searchWord: '',
   selectedCarId: undefined,
-  // selectedCar: undefined,
   selectedColumns: {
     ownerNameSurname: true,
     serialNumber: true,

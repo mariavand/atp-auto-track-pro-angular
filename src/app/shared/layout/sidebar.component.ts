@@ -21,8 +21,6 @@ import { Component, EventEmitter, input, InputSignal, model, ModelSignal, output
 })
 export class SidebarComponent {
 
-  // isSidebarOpen: ModelSignal<boolean> = model.required();
-
   isSidebarOpen = input();
   isSidebarOpenChange: OutputEmitterRef<boolean> = output();
 

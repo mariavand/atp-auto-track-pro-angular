@@ -1,10 +1,10 @@
 import { Component, inject, output, signal, Signal } from "@angular/core";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { AuthService, User } from "@auth0/auth0-angular";
-import { first, map } from "rxjs";
+import { filter, first, map } from "rxjs";
 import { SidebarComponent } from "./sidebar.component";
 import { SliderSvgComponent } from "../utilities/svgs/slider-svg.component";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 
 @Component({
   selector: 'atp-navigation-bar',
@@ -16,12 +16,12 @@ import { ActivatedRoute, Router } from "@angular/router";
         <div class="d-flex">
           <div class="navigation__logo-box">
              <button class="navigation__logo-image"></button>
-            </div>
-            @if(isAuthenticated()){
-             <button class="btn btn__icon btn__brd-light" (click)="openSidebar()">
-               <atp-slider-svg [stroke]="'#F3F3F3'"/>
-             </button>
-            }
+          </div>
+          @if(isAuthenticated() !== false && !url()?.includes('/system/car')){
+           <button class="btn btn__icon btn__brd-light" (click)="openSidebar()">
+             <atp-slider-svg [stroke]="'#F3F3F3'"/>
+           </button>
+          }
         </div>
         <nav class="navigation__nav">
             <ul class="navigation__list">
@@ -48,7 +48,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class NavigationBarComponent {
 
   authService = inject(AuthService);
-  #route = inject(ActivatedRoute);
   #router = inject(Router);
 
   user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(first()));
@@ -57,13 +56,10 @@ export class NavigationBarComponent {
 
   isSidebarOpen = signal(false);
 
-
   url = toSignal(this.#router.events.pipe(
     takeUntilDestroyed(),
-    map((url) => {
-      console.log('url', url);
-      return url;
-    })
+    filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+    map(url => url.url)
   ));
 
   openSidebar(){

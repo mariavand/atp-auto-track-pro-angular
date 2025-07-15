@@ -7,8 +7,10 @@
 .checkbox-wrapper-57 ::before
   box-sizing: border-box;
 
-.checkbox-wrapper-57 .container
-  display: block;
+.checkbox-wrapper-57 .checkbox-container
+  display: flex;
+  gap: 1.2rem;
+  color: $light;
   position: relative;
   cursor: pointer;
   font-size: 1.2rem;
@@ -26,8 +28,7 @@
   transition: all 0.7s;
   --spread: 1rem;
 
-/* When the checkbox is checked, add a blue background */
-.checkbox-wrapper-57 .container input:checked ~ .checkmark
+.checkbox-wrapper-57 .checkbox-container input:checked ~ .checkmark
   background: $light;
   box-shadow: -5px -5px var(--spread) 0px #5B51D8, 0 -5px var(--spread) 0px #833AB4, 5px -5px var(--spread) 0px #E1306C, 5px 0 var(--spread) 0px #FD1D1D, 5px 5px var(--spread) 0px #F77737, 0 5px var(--spread) 0px #FCAF45, -5px 5px var(--spread) 0px #FFDC80;
 
@@ -38,11 +39,11 @@
   display: none;
 
 /* Show the checkmark when checked */
-.checkbox-wrapper-57 .container input:checked ~ .checkmark::after
+.checkbox-wrapper-57 .checkbox-container input:checked ~ .checkmark::after
   display: block;
 
 /* Style the checkmark/indicator */
-.checkbox-wrapper-57 .container .checkmark::after
+.checkbox-wrapper-57 .checkbox-container .checkmark::after
   left: 0.5em;
   top: 0.34em;
   width: 0.25em;
@@ -50,3 +51,16 @@
   border: solid $primary;
   border-width: 0 0.15em 0.15em 0;
   transform: rotate(45deg);
+
+.checkbox-wrapper-57
+  padding: 1rem 1.5rem;
+
+.form
+  max-height: calc(100vh - 7.6rem);
+  overflow-y: clip;
+  &__all
+    margin-left: .5rem;
+  &__subcollection
+    margin-left: 2.5rem;
+
+

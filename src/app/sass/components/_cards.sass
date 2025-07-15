@@ -10,8 +10,9 @@
   background-color: rgba($light, .7);
   background-image: linear-gradient(to bottom right, rgba($secondary, .55), rgba($light, .7));
   &__header
-    background-color: $primary;
-    background-image: linear-gradient(to right, rgba($teal, .6), rgba($primary, .9));
+    background-color: rgba($teal, .8);
+    background-image: linear-gradient(to right, $teal, $blendTealPrimary, $primary, $blendPrimarySecondary, $secondary, $blendSecondaryLight, $light);
+    background-blend-mode: multiply;
     color: $light;
     padding: .5rem 1.3rem;
     margin: 0 -5.5rem;

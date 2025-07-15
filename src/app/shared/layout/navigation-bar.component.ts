@@ -4,7 +4,7 @@ import { AuthService, User } from "@auth0/auth0-angular";
 import { filter, first, map } from "rxjs";
 import { SidebarComponent } from "./sidebar.component";
 import { SliderSvgComponent } from "../utilities/svgs/slider-svg.component";
-import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Component({
   selector: 'atp-navigation-bar',

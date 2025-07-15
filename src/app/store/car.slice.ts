@@ -6,7 +6,7 @@ export type CarSlice = {
   readonly error: string | undefined;
   readonly searchWord: string;
   readonly selectedCarId: number | undefined;
-  readonly selectedColumns: Record<CarColumnKey, boolean>;
+  // readonly selectedColumns: Record<CarColumnKey, boolean>;
   readonly isEditModalOpen: boolean;
   readonly isHistoryModalOpen: boolean;
   readonly selectedCarHistory:  History[]| undefined;
@@ -14,6 +14,7 @@ export type CarSlice = {
   readonly historyError: string| undefined;
   readonly isCreating: boolean;
   readonly isUpdating: boolean;
+  // readonly carKeys: (keyof Car)[];
   readonly carGeneralKeys: (keyof Car)[];
   readonly carSalesKeys: (keyof Car)[];
   readonly carTechKeys: (keyof Car)[];
@@ -27,33 +28,6 @@ export const initialCarSlice: CarSlice = {
   error: undefined,
   searchWord: '',
   selectedCarId: undefined,
-  selectedColumns: {
-    ownerNameSurname: true,
-    serialNumber: true,
-    softwareVersion: true,
-    techComments: true,
-    buyingDay: true,
-    editedBy: true,
-    lastUpdateDate: true,
-    generalComments: true,
-    salesComments: true,
-    batteryChangeDate: true,
-    paymentStatus: true,
-    finalPrice: true,
-    initialPrice: true,
-    airConditioning: true,
-    fuelType: true,
-    seats: true,
-    transmission: true,
-    gps: true,
-    bluetooth: true,
-    status: true,
-    color: true,
-    carId: true,
-    model: true,
-    brand: true,
-    year: true,
-  },
   isEditModalOpen: false,
   isHistoryModalOpen: false,
   selectedCarHistory: undefined,
@@ -61,6 +35,7 @@ export const initialCarSlice: CarSlice = {
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
+  // carKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments', 'buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments', 'softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
   carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
   carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],

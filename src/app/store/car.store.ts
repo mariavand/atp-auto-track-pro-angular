@@ -12,6 +12,7 @@ import * as updaters from './car.updaters';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
 import { buildCarsVm } from './car-vm.builders';
+import { SidebarStore } from '../shared/layout/store/sidebar.store';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -20,10 +21,12 @@ export const CarStore = signalStore(
     const carsService = inject(CarsService);
     const router = inject(Router);
     const http = inject(HttpClient);
+    const sidebarStore = inject(SidebarStore);
     return {
       carsService,
       router,
-      http
+      http,
+      sidebarStore
     }
   }),
   withComputed((store) => ({
@@ -66,14 +69,14 @@ export const CarStore = signalStore(
       patchState(store, { isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined });
     },
 
-    toggleColumnVisibility(columnName: CarColumnKey) {
-      patchState(store, (currentState) => ({
-        selectedColumns: {
-          ...currentState.selectedColumns,
-          [columnName]: !currentState.selectedColumns[columnName]
-        }
-      }));
-    },
+    // toggleColumnVisibility(columnName: CarColumnKey) {
+    //   patchState(store, (currentState) => ({
+    //     selectedColumns: {
+    //       ...currentState.selectedColumns,
+    //       [columnName]: !currentState.selectedColumns[columnName]
+    //     }
+    //   }));
+    // },
 
     setCarHistory(history: History[]) {
       patchState(store, { selectedCarHistory: history, historyLoading: false, historyError: undefined });

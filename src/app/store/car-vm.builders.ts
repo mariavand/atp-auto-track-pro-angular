@@ -4,10 +4,11 @@ import { CarVM } from "./car.vm";
 export function buildCarsVm(
   store: any
 ): CarVM{
+  console.log(store.sidebarStore.vm());
   return {
     filteredCars: buildFilteredCarsList() ?? [],
     selectedCar: buildSelectedCar(store.selectedCarId(), store.cars()) ?? {} as Car,
-    visibleColumns: buildVisibleColumns(store.selectedColumns())
+    visibleColumns: buildVisibleColumns(store.sidebarStore.vm().selectedColumns),
   };
 
   function buildFilteredCarsList(){
@@ -39,8 +40,14 @@ export function buildCarsVm(
   }
 
   function buildVisibleColumns(columns: Record<CarColumnKey, boolean>){
-    const allKeys: CarColumnKey[] = Object.keys(columns) as CarColumnKey[];
-    return allKeys.filter(key => columns[key]);
+    console.log(columns);
+    if(columns){
+      const allKeys: CarColumnKey[] = Object.keys(columns) as CarColumnKey[];
+      return allKeys.filter(key => columns[key]);
+    }
+    return undefined;
   }
+
+
 }
 

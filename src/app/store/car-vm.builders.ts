@@ -4,11 +4,10 @@ import { CarVM } from "./car.vm";
 export function buildCarsVm(
   store: any
 ): CarVM{
-  console.log(store.sidebarStore.vm());
   return {
     filteredCars: buildFilteredCarsList() ?? [],
     selectedCar: buildSelectedCar(store.selectedCarId(), store.cars()) ?? {} as Car,
-    visibleColumns: buildVisibleColumns(store.sidebarStore.vm().selectedColumns),
+    visibleColumns: buildVisibleColumns(store.sidebarStore.defaultColumns()),
   };
 
   function buildFilteredCarsList(){

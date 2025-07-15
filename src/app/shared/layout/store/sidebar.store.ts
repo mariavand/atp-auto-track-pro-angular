@@ -3,22 +3,38 @@ import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialColumnsSlice } from './sidebar.slice';
 import { computed } from '@angular/core';
 import { buildSidebarVm } from './sidebar-vm.builders';
+import { CarColumnKey } from '../../models/car.model';
 
 export const SidebarStore = signalStore(
   { providedIn: 'root' },
   withState(initialColumnsSlice),
   withComputed((store) => ({
-    vm: computed(() => buildSidebarVm(store.defaultColumns())),
+    // vm: computed(() => buildSidebarVm(store.defaultColumns())),
   })),
   withMethods(store => ({
-    // toggleColumnVisibility(columnName: CarColumnKey) {
-    //   patchState(store, (currentState) => ({
-    //     selectedColumns: {
-    //       ...currentState.selectedColumns,
-    //       [columnName]: !currentState.selectedColumns[columnName]
-    //     }
-    //   }));
-    // },
+    saveColumns(newColumns: Record<CarColumnKey, boolean>){
+      console.log('newColumns', newColumns);
+      localStorage.setItem('columns', JSON.stringify(newColumns));
+      patchState(store, { defaultColumns: newColumns })
+    },
+
+    initializeColumns(defaultColumns: Record<CarColumnKey, boolean>){
+
+      let finalColumns = defaultColumns;
+
+      let localySaved = JSON.parse(localStorage.getItem('columns')!);
+
+      console.log('localySaved', localySaved);
+      if(localySaved != null){
+        finalColumns = localySaved;
+      }
+      patchState(store, { defaultColumns: finalColumns } )
+    }
+  })),
+  withHooks((store) => ({
+    onInit: () => {
+      store.initializeColumns(store.defaultColumns())
+    }
   })),
   withDevtools('sidebar-store')
 )

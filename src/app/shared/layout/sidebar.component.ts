@@ -4,6 +4,7 @@ import { CustomCheckboxComponent } from "../utilities/components/custom-checkbox
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SidebarStore } from './store/sidebar.store';
 import { CarStore } from '../../store/car.store';
+import { CarColumnKey } from '../models/car.model';
 
 @Component({
   selector: 'atp-sidebar',
@@ -24,7 +25,7 @@ import { CarStore } from '../../store/car.store';
             <atp-custom-checkbox [label]="'Select All'" (change)="updateColumnsCheckboxes(!!f.get('selectAll')?.value)" formControlName="selectAll"/>
           </div>
           <div class="form__subcollection" formGroupName="columns">
-            @for(key of store.carKeys(); track $index){
+            @for(key of sidebarStore.carKeys(); track $index){
               <atp-custom-checkbox [label]="carStore.allColumnsNamesMapper()[key]" formControlName="{{key}}" (change)="saveColumns()"/>
             }
           </div>
@@ -37,7 +38,7 @@ import { CarStore } from '../../store/car.store';
 })
 export class SidebarComponent {
 
-  store = inject(SidebarStore);
+  sidebarStore = inject(SidebarStore);
   carStore = inject(CarStore);
   #fb = inject(FormBuilder);
 
@@ -51,11 +52,12 @@ export class SidebarComponent {
 
   constructor(){
     effect(() => {
-      this.store.carKeys().forEach((k) => {
-        this.col.addControl(k, this.#fb.control(false));
+      let flag = true;
+      this.sidebarStore.carKeys().forEach((k) => {
+        this.col.addControl(k, this.#fb.control(this.sidebarStore.defaultColumns()[k as CarColumnKey]));
+        flag = this.sidebarStore.defaultColumns()[k as CarColumnKey]
       })
-
-      console.log('f', this.f);
+      this.f.get('selectAll')?.patchValue(flag);
     })
   }
 
@@ -68,14 +70,14 @@ export class SidebarComponent {
   }
 
   updateColumnsCheckboxes(val: boolean){
-    this.store.carKeys().forEach((k) => {
+    this.sidebarStore.carKeys().forEach((k) => {
       this.col.get(k)?.patchValue(val);
     });
     this.saveColumns();
   }
 
   saveColumns(){
-    console.log(this.f.value);
+    this.sidebarStore.saveColumns(this.f.controls.columns.value as Record<CarColumnKey, boolean>);
   }
 
 }

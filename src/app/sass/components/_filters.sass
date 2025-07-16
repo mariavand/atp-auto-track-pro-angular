@@ -1,5 +1,4 @@
 .filters
-  width: 170.5rem;
   margin: 2rem 3rem;
 
   &__search
@@ -9,11 +8,18 @@
     box-shadow: 10px  10px 35px $secondary;
     width: 100%;
     padding: 1rem 3rem;
+    margin-left: 1rem;
     background-color: adjust-color($secondary, $lightness: 55%);
 
   &__input-container
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    width: 185rem;
+    height: 3.5rem;
+
   &__label-icon
     position: absolute;
     top: 6px;
-    left: 5px;
+    left: 60px;

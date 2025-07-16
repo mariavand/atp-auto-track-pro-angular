@@ -5,21 +5,24 @@ import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.compo
 import { DeleteSvgComponent } from "../../shared/utilities/svgs/delete-svg.component";
 import { RouterModule } from "@angular/router";
 import { CarStore } from "../../store/car.store";
+import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
+import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 
 @Component({
   selector: 'atp-cars-table',
   template: `
-  @let vm = store.vm();
+    @let vm = store.vm();
 
     <section class="filters">
       <div class="filters__input-container">
 
+        <button class="btn btn__icon btn__brd-light">
+          <atp-add-svg/>
+        </button>
         <label for="filters-search" class="filters__label-icon">
           <atp-search-svg/>
         </label>
-        <input class="filters__search" type="text" id="filter-search" (keyup)="store.setSearchWord($event.target)">
-
-
+        <input class="filters__search" type="text" id="filters-search" (keyup)="store.setSearchWord($event.target)">
       </div>
     </section>
     <div class="table__wrapper">
@@ -48,6 +51,9 @@ import { CarStore } from "../../store/car.store";
               <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                 <atp-view-svg/>
               </a>
+              <button class="btn btn__icon">
+                <atp-edit-svg/>
+              </button>
               <button class="btn btn__icon">
                 <atp-delete-svg/>
               </button>
@@ -79,7 +85,7 @@ import { CarStore } from "../../store/car.store";
     </div>
 
   `,
-  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent]
 })
 export class CarsTableComponent {
 

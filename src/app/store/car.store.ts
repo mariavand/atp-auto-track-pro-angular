@@ -69,15 +69,6 @@ export const CarStore = signalStore(
       patchState(store, { isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined });
     },
 
-    // toggleColumnVisibility(columnName: CarColumnKey) {
-    //   patchState(store, (currentState) => ({
-    //     selectedColumns: {
-    //       ...currentState.selectedColumns,
-    //       [columnName]: !currentState.selectedColumns[columnName]
-    //     }
-    //   }));
-    // },
-
     setCarHistory(history: History[]) {
       patchState(store, { selectedCarHistory: history, historyLoading: false, historyError: undefined });
     },

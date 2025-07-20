@@ -6,15 +6,14 @@ export type CarSlice = {
   readonly error: string | undefined;
   readonly searchWord: string;
   readonly selectedCarId: number | undefined;
-  // readonly selectedColumns: Record<CarColumnKey, boolean>;
   readonly isEditModalOpen: boolean;
+  readonly isAddModalOpen: boolean;
   readonly isHistoryModalOpen: boolean;
   readonly selectedCarHistory:  History[]| undefined;
   readonly historyLoading: boolean;
   readonly historyError: string| undefined;
   readonly isCreating: boolean;
   readonly isUpdating: boolean;
-  // readonly carKeys: (keyof Car)[];
   readonly carGeneralKeys: (keyof Car)[];
   readonly carSalesKeys: (keyof Car)[];
   readonly carTechKeys: (keyof Car)[];
@@ -29,13 +28,13 @@ export const initialCarSlice: CarSlice = {
   searchWord: '',
   selectedCarId: undefined,
   isEditModalOpen: false,
+  isAddModalOpen: false,
   isHistoryModalOpen: false,
   selectedCarHistory: undefined,
   historyLoading: false,
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
-  // carKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments', 'buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments', 'softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
   carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
   carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],

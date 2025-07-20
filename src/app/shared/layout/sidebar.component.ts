@@ -48,7 +48,7 @@ export class SidebarComponent {
   f = this.#fb.group({
     selectAll: false,
     columns: this.#fb.group({})
-  })
+  });
 
   constructor(){
     effect(() => {

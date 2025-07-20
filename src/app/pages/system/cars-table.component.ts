@@ -7,6 +7,7 @@ import { RouterModule } from "@angular/router";
 import { CarStore } from "../../store/car.store";
 import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
+import { AddCarModal } from "./add-car-modal.component";
 
 @Component({
   selector: 'atp-cars-table',
@@ -16,7 +17,7 @@ import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component
     <section class="filters">
       <div class="filters__input-container">
 
-        <button class="btn btn__icon btn__brd-light">
+        <button class="btn btn__icon btn__brd-light" (click)="openModal()">
           <atp-add-svg/>
         </button>
         <label for="filters-search" class="filters__label-icon">
@@ -82,13 +83,20 @@ import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component
           }
         </tr>
       </table>
+
     </div>
 
+    @if(store.isAddModalOpen()){
+      <atp-add-car-modal/>
+    }
   `,
-  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, AddCarModal]
 })
 export class CarsTableComponent {
 
   store = inject(CarStore);
 
+  openModal(){
+    this.store.openAddModal();
+  }
 }

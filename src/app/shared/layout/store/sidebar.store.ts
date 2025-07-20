@@ -1,8 +1,6 @@
 import { patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialColumnsSlice } from './sidebar.slice';
-import { computed } from '@angular/core';
-import { buildSidebarVm } from './sidebar-vm.builders';
 import { CarColumnKey } from '../../models/car.model';
 
 export const SidebarStore = signalStore(
@@ -13,7 +11,6 @@ export const SidebarStore = signalStore(
   })),
   withMethods(store => ({
     saveColumns(newColumns: Record<CarColumnKey, boolean>){
-      console.log('newColumns', newColumns);
       localStorage.setItem('columns', JSON.stringify(newColumns));
       patchState(store, { defaultColumns: newColumns })
     },
@@ -24,7 +21,7 @@ export const SidebarStore = signalStore(
 
       let localySaved = JSON.parse(localStorage.getItem('columns')!);
 
-      console.log('localySaved', localySaved);
+      // console.log('localySaved', localySaved);
       if(localySaved != null){
         finalColumns = localySaved;
       }

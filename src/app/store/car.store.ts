@@ -5,7 +5,7 @@ import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
-import { Car, CarColumnKey } from '../shared/models/car.model';
+import { Car } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { first, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
 import { buildCarsVm } from './car-vm.builders';
 import { SidebarStore } from '../shared/layout/store/sidebar.store';
+import { withEntities } from '@ngrx/signals/entities';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -31,93 +32,96 @@ export const CarStore = signalStore(
   }),
   withComputed((store) => ({
     vm: computed(() => buildCarsVm(store)),
-    // anyLoading: computed(() => store.loading() || store.historyLoading() || store.isCreating() || store.isUpdating()),
   })),
-  withMethods(store => ({
+  withMethods((store) => ({
     setSearchWord: (target: any) => {
       patchState(store, updaters.setSearchWord(target.value))
     },
     setCars(cars: Car[]){
-      patchState(store, { cars, loading: false, error: undefined })
+      patchState(store, updaters.setCars(cars))
     },
 
     setLoading(loading: boolean){
-      patchState(store, { loading })
+      patchState(store, updaters.setLoading(loading))
     },
 
     setError(error: string | undefined){
-      patchState(store, { error, loading: false })
+      patchState(store, updaters.setError(error))
     },
 
     setSelectedCarId(id: number | undefined | null) {
-      patchState(store, { selectedCarId: id == null ? undefined : id });
+      patchState(store, updaters.setSelectedCarId(id));
     },
 
-    openEditModal(carId: number | undefined = undefined) {
-      patchState(store, { isEditModalOpen: true, selectedCarId: carId });
+    openEditModal(carId: number | undefined) {
+      patchState(store, updaters.openEditModal(carId));
     },
 
     closeEditModal() {
-      patchState(store, { isEditModalOpen: false, selectedCarId: undefined });
+      patchState(store, updaters.closeEditModal());
     },
 
     openHistoryModal(carId: number | undefined) {
-      patchState(store, { isHistoryModalOpen: true, selectedCarId: carId });
+      patchState(store, updaters.openHistoryModal(carId));
     },
 
     closeHistoryModal() {
-      patchState(store, { isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined });
+      patchState(store, updaters.closeHistoryModal());
     },
 
     setCarHistory(history: History[]) {
-      patchState(store, { selectedCarHistory: history, historyLoading: false, historyError: undefined });
+      patchState(store, updaters.setCarHistory(history));
     },
 
     setHistoryLoading(loading: boolean) {
-      patchState(store, { historyLoading: loading });
+      patchState(store, updaters.setHistoryLoading(loading));
     },
 
     setHistoryError(error: string | undefined) {
-      patchState(store, { historyError: error, historyLoading: false });
+      patchState(store, updaters.setHistoryError(error));
     },
 
-    addCar(newCar: Car) {
-      patchState(store, (currentState) => ({
-        cars: [...currentState.cars, newCar],
-        isCreating: false,
-        error: undefined
-      }));
+    closeAddModal(){
+      patchState(store, updaters.closeAddModal());
     },
 
-    updateCarInList(updatedCar: Car) {
-      patchState(store, (currentState) => ({
-        cars: currentState.cars.map(car =>
-          car.carId === updatedCar.carId ? updatedCar : car
-        ),
-        isUpdating: false,
-        error: undefined
-      }));
+    openAddModal(){
+      patchState(store, updaters.openAddModal());
     },
 
-    removeCarFromList(carId: number) {
-      patchState(store, (currentState) => ({
-        cars: currentState.cars.filter(car => car.carId !== carId),
-        loading: false,
-        error: undefined,
-        selectedCarId: currentState.selectedCarId === carId ? undefined : currentState.selectedCarId
-      }));
-    },
+    // addCar(newCar: Car) {
+    //   patchState(store, (currentState) => ({
+    //     cars: [...currentState.cars, newCar],
+    //     isCreating: false,
+    //     error: undefined
+    //   }));
+    // },
+
+    // updateCarInList(updatedCar: Car) {
+    //   patchState(store, (currentState) => ({
+    //     cars: currentState.cars.map(car =>
+    //       car.carId === updatedCar.carId ? updatedCar : car
+    //     ),
+    //     isUpdating: false,
+    //     error: undefined
+    //   }));
+    // },
+
+    // removeCarFromList(carId: number) {
+    //   patchState(store, (currentState) => ({
+    //     cars: currentState.cars.filter(car => car.carId !== carId),
+    //     loading: false,
+    //     error: undefined,
+    //     selectedCarId: currentState.selectedCarId === carId ? undefined : currentState.selectedCarId
+    //   }));
+    // },
 
     isDate(value: any){
-      if(typeof value == 'string'){
-        const data = new Date(value);
-        if(data.toString() != 'Invalid Date'){
-          return true;
-        }
-      }
-      return false;
+      return updaters.isDate(value);
     },
 
+  })),
+  withMethods((store) => ({
     // --- Effects (Asynchronous operations using rxMethod) ---
     // Effect to load all cars
     loadAllCars: rxMethod<void>(
@@ -135,6 +139,31 @@ export const CarStore = signalStore(
       )
     ),
 
+    addNewCar: rxMethod<Omit<Car, 'carId'>>(
+      pipe(
+        tap(() => patchState(store, { isCreating: true, error: undefined })),
+        switchMap((newCarData) =>
+          store.http.post<Car>(environment.apiUrl + '/cars', newCarData).pipe(
+            first(),
+            tapResponse({
+              next: (createdCar) => {
+                patchState(store, (currentState) => ({
+                  cars: [...currentState.cars, createdCar],
+                  isCreating: false,
+                  error: undefined,
+                  selectedCarId: createdCar.carId
+                }));
+                store.closeAddModal();
+                store.router.navigate(['/cars', createdCar.carId]);
+              },
+              error: (err: any) => {
+                patchState(store, { error: err.message, isCreating: false });
+              }
+            })
+          )
+        )
+      )
+    )
   })),
   withHooks(({ loadAllCars }) => ({
     onInit: () => {

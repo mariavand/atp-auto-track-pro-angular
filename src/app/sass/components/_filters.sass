@@ -2,14 +2,8 @@
   margin: 2rem 3rem;
 
   &__search
-    border: 1px solid $secondary;
-    outline: none;
-    border-radius: 15px;
-    box-shadow: 10px  10px 35px $secondary;
+    @include inputBar;
     width: 100%;
-    padding: 1rem 3rem;
-    margin-left: 1rem;
-    background-color: adjust-color($secondary, $lightness: 55%);
 
   &__input-container
     display: flex;

@@ -2,7 +2,17 @@
   cursor: pointer;
   &__icon
     border: none;
+    outline: none;
     background-color: transparent;
     &:hover
       border-radius: 10px;
       border: 1px solid $secondary;
+
+@mixin inputBar
+  border: 1px solid $secondary;
+  outline: none;
+  border-radius: 15px;
+  box-shadow: 10px  10px 35px $secondary;
+  padding: 1rem 3rem;
+  margin-left: 1rem;
+  background-color: adjust-color($secondary, $lightness: 55%);

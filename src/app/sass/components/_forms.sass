@@ -63,4 +63,21 @@
   &__subcollection
     margin-left: 2.5rem;
 
+  &__control
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__label
+      font-size: 1.7rem;
+      padding: 0 1rem;
+
+    &__inputText
+      @include inputBar;
+
+    &__textarea
+      @include inputBar;
+      border-radius: 15px 15px 5px 15px;
+      height: 8rem;
+
 

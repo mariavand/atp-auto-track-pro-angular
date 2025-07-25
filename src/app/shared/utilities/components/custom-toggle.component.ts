@@ -18,12 +18,6 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModu
       -moz-appearance: none;
       appearance: none;
       margin: 1rem
-      // position: absolute;
-      // margin: auto;
-      // left: 0;
-      // right: 0;
-      // top: 0;
-      // bottom: 0;
       cursor: pointer;
       outline: none;
       height: 3.5rem;

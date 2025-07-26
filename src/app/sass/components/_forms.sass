@@ -1,26 +1,65 @@
 .form
   max-height: calc(100vh - 7.6rem);
-  overflow-y: clip;
+  padding: 4rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
   &__all
     margin-left: .5rem;
   &__subcollection
     margin-left: 2.5rem;
 
+.carForm
+  max-height: 50rem;
+  padding: 3rem 6rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
   &__control
-    padding: 1rem;
+    padding: .5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 60rem;
     &__label
       font-size: 1.7rem;
       padding: 0 1rem;
 
     &__inputText
       @include inputBar;
+      z-index: 1;
 
     &__textarea
       @include inputBar;
       border-radius: 15px 15px 5px 15px;
       height: 8rem;
+      z-index: 1;
 
-
+.select
+  position: relative;
+  &__btn
+    @include inputBar;
+    z-index: 0;
+    text-align: left;
+  &__dropdown
+    list-style: none;
+    position: absolute;
+    top: 1;
+    left: 0;
+    z-index: 2;
+    width: 33rem;
+    &__option
+      font-size: 1.2rem;
+      color: $primary;
+      margin: 0 0 0 1rem;
+      padding: 1rem;
+      background-color: adjust-color($secondary, $lightness: 55%);
+      border: 1px solid $secondary;
+      cursor: pointer;
+      &:hover
+        background-color: adjust-color($teal, $lightness: -8%);
+        color: $light;
+      &:not(:last-of-type)
+        border-bottom: none;
+      &:last-of-type
+        border-radius: 0 0 15px 15px;
+      &:first-of-type
+        border-radius: 15px 15px 0 0;

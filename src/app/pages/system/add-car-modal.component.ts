@@ -4,6 +4,7 @@ import { CarStore } from "../../store/car.store";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SidebarStore } from "../../shared/layout/store/sidebar.store";
 import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
+import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
 
 @Component({
   selector: 'atp-add-car-modal',
@@ -24,7 +25,7 @@ import { CustomToggleComponent } from "../../shared/utilities/components/custom-
             </h2>
           </div>
           <div class="card__body">
-            <form class="form flex-container" [formGroup]="form">
+            <form class="carForm" [formGroup]="form">
               <div class="card">
                 <div class="card__header">
                   <h2 class="px-1">
@@ -32,17 +33,21 @@ import { CustomToggleComponent } from "../../shared/utilities/components/custom-
                   </h2>
                 </div>
                 <div class="card__body">
+                  <div class="carForm__control">
+                    <label class="carForm__control__label" for="{{'test'}}">{{ 'Seats' + ': ' }}</label>
+                    <atp-custom-select id="{{'test'}}" [options]="options"/>
+                  </div>
                   @for(k of generalKeys(); track k){
                     @if(k.includes('Comment')){
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="form__control__textarea" name="{{k}}" id="{{k}}"></textarea>
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
                       </div>
                     }
                     @else {
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <input class="form__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <input class="carForm__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
                       </div>
                     }
                   }
@@ -58,15 +63,21 @@ import { CustomToggleComponent } from "../../shared/utilities/components/custom-
                 <div class="card__body">
                   @for(k of store.carSalesKeys(); track k){
                     @if(k.includes('Comment')){
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="form__control__textarea" name="{{k}}" id="{{k}}"></textarea>
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
+                      </div>
+                    }
+                    @else if(k.includes('buyingDay')){
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <input class="carForm__control__inputText" type="date" formControlName="{{k}}" name="{{k}}">
                       </div>
                     }
                     @else {
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <input class="form__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <input class="carForm__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
                       </div>
                     }
                   }
@@ -82,21 +93,27 @@ import { CustomToggleComponent } from "../../shared/utilities/components/custom-
                 <div class="card__body">
                   @for(k of store.carTechKeys(); track k){
                     @if(k.includes('airConditioning') || k.includes('gps') || k.includes('bluetooth')){
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
                         <atp-custom-toggle [name]="k"/>
                       </div>
                     }
+                    @else if(k.includes('batteryChangeDate')){
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <input class="carForm__control__inputText" type="date" formControlName="{{k}}" name="{{k}}">
+                      </div>
+                    }
                     @else if(k.includes('Comment')){
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="form__control__textarea" name="{{k}}" id="{{k}}"></textarea>
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
                       </div>
                     }
                     @else {
-                      <div class="form__control">
-                        <label class="form__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <input class="form__control__inputText" type="text" formControlName="{{k}}" id="{{k}}">
+                      <div class="carForm__control">
+                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                        <input class="carForm__control__inputText" type="text" formControlName="{{k}}" id="{{k}}">
                       </div>
                     }
                   }
@@ -108,7 +125,7 @@ import { CustomToggleComponent } from "../../shared/utilities/components/custom-
       </div>
     </section>
   `,
-  imports: [CloseSVGComponent, ReactiveFormsModule, CustomToggleComponent]
+  imports: [CloseSVGComponent, ReactiveFormsModule, CustomToggleComponent, CustomSelectComponent]
 })
 export class AddCarModal{
 
@@ -123,10 +140,25 @@ export class AddCarModal{
 
   form = this.#fb.group({});
 
+  options = [
+    { label: '1 seat', value: 1 },
+    { label: '2 seats', value: 2 },
+    { label: '3 seats', value: 3 }
+  ]
+
   constructor(){
     console.log('this.keys', this.keys);
     this.keys.forEach((m) => {
-      this.form.addControl(m, this.#fb.control(''));
+      console.log('m', m);
+      if(m.includes('airConditioning') || m.includes('gps') || m.includes('blutooth')){
+        this.form.addControl(m, this.#fb.control(false));
+      }
+      // else if(m.includes('')){
+
+      // }
+      else{
+        this.form.addControl(m, this.#fb.control(''));
+      }
     });
     console.log('this.form', this.form);
   }

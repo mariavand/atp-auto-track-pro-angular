@@ -1,65 +1,63 @@
 .form
-  max-height: calc(100vh - 7.6rem);
-  padding: 4rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  max-height: calc(100vh - 7.6rem)
+  padding: 4rem
+  overflow-y: scroll
+  overflow-x: hidden
   &__all
-    margin-left: .5rem;
+    margin-left: .5rem
   &__subcollection
-    margin-left: 2.5rem;
+    margin-left: 2.5rem
 
 .carForm
-  max-height: 50rem;
-  padding: 3rem 6rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  max-height: 50rem
+  padding: 3rem 6rem
+  overflow-y: scroll
+  overflow-x: hidden
   &__control
-    padding: .5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 60rem;
+    padding: .5rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 60rem
     &__label
-      font-size: 1.7rem;
-      padding: 0 1rem;
+      font-size: 1.9rem
+      padding: 0 1rem
 
     &__inputText
-      @include inputBar;
-      z-index: 1;
+      @include inputBar
 
     &__textarea
-      @include inputBar;
-      border-radius: 15px 15px 5px 15px;
-      height: 8rem;
-      z-index: 1;
+      @include inputBar
+      border-radius: 15px 15px 5px 15px
+      margin-bottom: 1rem
+      height: 8rem
 
 .select
-  position: relative;
+  position: relative
   &__btn
-    @include inputBar;
-    z-index: 0;
-    text-align: left;
+    @include inputBar
+    text-align: left
   &__dropdown
-    list-style: none;
-    position: absolute;
-    top: 1;
-    left: 0;
-    z-index: 2;
-    width: 33rem;
+    list-style: none
+    position: absolute
+    top: 1
+    left: 0
+    z-index: 2
+    width: 33rem
     &__option
-      font-size: 1.2rem;
-      color: $primary;
-      margin: 0 0 0 1rem;
-      padding: 1rem;
-      background-color: adjust-color($secondary, $lightness: 55%);
-      border: 1px solid $secondary;
-      cursor: pointer;
+      font-size: 1.2rem
+      color: $primary
+      margin: 0 0 0 1rem
+      padding: 1rem
+      background-color: adjust-color($secondary, $lightness: 55%)
+      border: 1px solid $secondary
+      cursor: pointer
       &:hover
-        background-color: adjust-color($teal, $lightness: -8%);
-        color: $light;
+        background-color: adjust-color($teal, $lightness: -8%)
+        color: $light
       &:not(:last-of-type)
-        border-bottom: none;
+        border-bottom: none
       &:last-of-type
-        border-radius: 0 0 15px 15px;
+        border-radius: 0 0 15px 15px
       &:first-of-type
-        border-radius: 15px 15px 0 0;
+        border-radius: 15px 15px 0 0

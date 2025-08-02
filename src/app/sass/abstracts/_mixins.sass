@@ -1,21 +1,22 @@
 @mixin icon-btn
-  cursor: pointer;
+  cursor: pointer
   &__icon
-    border: none;
-    outline: none;
-    background-color: transparent;
+    border: none
+    outline: none
+    background-color: transparent
     &:hover
-      border-radius: 10px;
-      border: 1px solid $secondary;
+      border-radius: 10px
+      border: 1px solid $secondary
 
 @mixin inputBar
-  border: 1px solid $secondary;
-  color: $primary;
-  outline: none;
-  border-radius: 15px;
-  box-shadow: 10px  10px 35px $secondary;
-  width: 30rem;
-  padding: 1rem;
-  margin-left: 1rem;
-  cursor: pointer;
-  background-color: adjust-color($secondary, $lightness: 55%);
+  border: 1px solid $secondary
+  color: $primary
+  outline: none
+  border-radius: 15px
+  width: 30rem
+  padding: 1rem
+  margin-left: 1rem
+  margin-top: .5rem
+  cursor: pointer
+  background-color: adjust-color($secondary, $lightness: 55%)
+  caret-color: $teal

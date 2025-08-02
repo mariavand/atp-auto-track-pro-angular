@@ -1,34 +1,35 @@
 .table__wrapper
-  width: 185rem;
-  height: 70rem;
-  overflow-x: auto;
-  overflow-y: clip;
-  margin: 0 auto;
+  width: 185rem
+  height: 70rem
+  overflow-x: auto
+  overflow-y: clip
+  margin: 0 auto
 .table
-  background-color: rgba($light, .9);
-  font-size: 1.5rem;
-  color: $primary;
-  overflow: scroll;
-  border-spacing: 0;
-  border: 1px solid adjust-color($primary, $lightness: 15%);
+  background-color: rgba($light, .9)
+  font-size: 1.5rem
+  color: $primary
+  overflow: scroll
+  border-spacing: 0
+  border: 1px solid adjust-color($primary, $lightness: 15%)
   &__th
-    border-bottom: 2px solid $primary;
+    border-bottom: 2px solid $primary
 
   &__th, &__td
-    padding: 1rem;
-    white-space: nowrap;
-    text-align: center;
+    padding: 1rem
+    white-space: nowrap
+    text-align: center
 
   &__tr
     &:nth-child(odd)
-      background-color: adjust-color($secondary, $lightness: 35%);
+      background-color: adjust-color($secondary, $lightness: 35%)
     &:nth-child(even)
-      background-color: adjust-color($secondary, $lightness: 55%);
+      background-color: adjust-color($secondary, $lightness: 55%)
     &:nth-child(1)
-      background-color: rgba($teal, .8);
-      background-image: linear-gradient(to right, $teal, $blendTealPrimary, $primary, $blendPrimarySecondary, $secondary, $blendSecondaryLight, $light);
-      background-blend-mode: multiply;
-      color: $light;
+      background-color: rgba($teal, .8)
+      background-image: linear-gradient(to right, $teal, $blendTealPrimary, $primary, $blendPrimarySecondary, $secondary, $blendSecondaryLight, $light)
+      background-blend-mode: multiply
+      color: $light
     &:hover:not(:nth-child(1))
-      background-color: rgba($light, .7);
-      background-image: linear-gradient(to top, rgba($teal, .2), rgba($light, .7));
+      background-color: rgba($light, .7)
+      background-image: linear-gradient(to top, rgba($teal, .2), rgba($light, .7))
+      background-blend-mode: multiply

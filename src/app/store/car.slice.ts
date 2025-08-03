@@ -35,7 +35,7 @@ export const initialCarSlice: CarSlice = {
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
-  carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments'],
+  carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'brand', 'model', 'year', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
   carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
   allColumnsNamesMapper: {

@@ -1,17 +1,10 @@
 .navigation
   &__btn
-    color: $light
-    padding: .5rem 1rem
+    @include btnBase
     background: none
-    outline: none
-    border-radius: 15px 0 15px 0
     border: none
-    font-size: 1.8rem
-    margin: 1px
-    cursor: pointer
     &:hover
-      margin: 0
-      border: 1px solid $light
+      color: adjust-color($teal, $lightness: 10%)
 
 .btn
   padding: calc(.5rem + 1px)
@@ -21,3 +14,17 @@
   &:hover
     padding: .5rem
 
+  &__wrapper
+    transform: skew(12deg)
+
+  &__action
+    text-transform: uppercase
+    transform: skew(-12deg)
+    box-shadow: 0 0 20px #eee
+    @include btnBase
+
+  &__submit
+    background-image: linear-gradient(to right, #00bf8f 0%, #001510  51%, #00bf8f  100%)
+
+  &__cancel
+    background-image: linear-gradient(to right, $red 0%, #1F1C18  51%, $red  100%)

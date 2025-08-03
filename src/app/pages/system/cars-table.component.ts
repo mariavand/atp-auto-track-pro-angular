@@ -17,7 +17,7 @@ import { AddCarModal } from "./add-car-modal.component";
     <section class="filters">
       <div class="filters__input-container">
 
-        <button class="btn btn__icon btn__brd-light" (click)="openModal()">
+        <button class="btn btn__icon btn__brd-light" (click)="this.store.openAddModal()">
           <atp-add-svg/>
         </button>
         <label for="filters-search" class="filters__label-icon">
@@ -46,8 +46,8 @@ import { AddCarModal } from "./add-car-modal.component";
           }
         </tr>
 
-        <tr class="table__tr">
-          @for(car of vm.filteredCars; track car){
+        @for(car of vm.filteredCars; track car){
+          <tr class="table__tr">
             <td class="table__td">
               <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                 <atp-view-svg/>
@@ -75,13 +75,15 @@ import { AddCarModal } from "./add-car-modal.component";
                 }
               </td>
             }
-          }
-          @empty {
-              <td class="table__td">
-                No cars
-              </td>
-          }
-        </tr>
+          </tr>
+        }
+        @empty {
+          <tr class="table__tr">
+            <td class="table__td">
+              No cars
+            </td>
+          </tr>
+        }
       </table>
 
     </div>
@@ -96,7 +98,8 @@ export class CarsTableComponent {
 
   store = inject(CarStore);
 
-  openModal(){
-    this.store.openAddModal();
+  constructor(){
+    console.log('cars', this.store.vm().filteredCars)
   }
+
 }

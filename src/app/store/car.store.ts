@@ -154,7 +154,6 @@ export const CarStore = signalStore(
                   selectedCarId: createdCar.carId
                 }));
                 store.closeAddModal();
-                store.router.navigate(['/cars', createdCar.carId]);
               },
               error: (err: any) => {
                 patchState(store, { error: err.message, isCreating: false });

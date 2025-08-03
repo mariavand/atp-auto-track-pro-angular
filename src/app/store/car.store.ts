@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
 import { buildCarsVm } from './car-vm.builders';
 import { SidebarStore } from '../shared/layout/store/sidebar.store';
+import { ToastrService } from 'ngx-toastr';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -22,11 +23,13 @@ export const CarStore = signalStore(
     const router = inject(Router);
     const http = inject(HttpClient);
     const sidebarStore = inject(SidebarStore);
+    const toastr = inject(ToastrService);
     return {
       carsService,
       router,
       http,
-      sidebarStore
+      sidebarStore,
+      toastr
     }
   }),
   withComputed((store) => ({
@@ -100,25 +103,6 @@ export const CarStore = signalStore(
       patchState(store, updaters.openDeleteModal());
     },
 
-    // updateCarInList(updatedCar: Car) {
-    //   patchState(store, (currentState) => ({
-    //     cars: currentState.cars.map(car =>
-    //       car.carId === updatedCar.carId ? updatedCar : car
-    //     ),
-    //     isUpdating: false,
-    //     error: undefined
-    //   }));
-    // },
-
-    // removeCarFromList(carId: number) {
-    //   patchState(store, (currentState) => ({
-    //     cars: currentState.cars.filter(car => car.carId !== carId),
-    //     loading: false,
-    //     error: undefined,
-    //     selectedCarId: currentState.selectedCarId === carId ? undefined : currentState.selectedCarId
-    //   }));
-    // },
-
     isDate(value: any){
       return updaters.isDate(value);
     },
@@ -135,7 +119,11 @@ export const CarStore = signalStore(
             first(),
             tapResponse({
               next: (cars: Car[]) => patchState(store, { cars, loading: false }),
-              error: (err: any) => patchState(store, { error: err.message, loading: false }),
+              error: (err: any) => {
+                console.log('err', err);
+                store.toastr.error('Something went wrong!', err.statusText);;
+                patchState(store, { error: err.message, loading: false })
+              },
             })
           )
         )
@@ -159,6 +147,8 @@ export const CarStore = signalStore(
                 store.closeAddModal();
               },
               error: (err: any) => {
+                console.log('err', err);
+                store.toastr.error('Something went wrong!', err.statusText);;
                 patchState(store, { error: err.message, isCreating: false });
               }
             })
@@ -183,7 +173,36 @@ export const CarStore = signalStore(
                 store.closeDeleteModal();
               },
               error: (err: any) => {
+                console.log('err', err);
+                store.toastr.error('Something went wrong!', err.statusText);
                 patchState(store, { error: err.message, isDeleting: false });
+              }
+            })
+          )
+        )
+      )
+    ),
+
+    saveEditedCar: rxMethod<Omit<Car, 'carId'>>(
+      pipe(
+        tap(() => patchState(store, { isUpdating: true, error: undefined })),
+        switchMap((carData) =>
+          store.http.put<Car>(environment.apiUrl + '/cars/' + store.selectedCarId, carData).pipe(
+            first(),
+            tapResponse({
+              next: (editedCar) => {
+                patchState(store, (currentState) => ({
+                  cars: [...currentState.cars, editedCar],
+                  isUpdating: false,
+                  error: undefined,
+                  selectedCarId: editedCar.carId
+                }));
+                store.closeAddModal();
+              },
+              error: (err: any) => {
+                console.log('err', err);
+                store.toastr.error('Something went wrong!', err.statusText);
+                patchState(store, { error: err.message, isUpdating: false });
               }
             })
           )

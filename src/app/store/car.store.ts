@@ -13,7 +13,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
 import { buildCarsVm } from './car-vm.builders';
 import { SidebarStore } from '../shared/layout/store/sidebar.store';
-import { withEntities } from '@ngrx/signals/entities';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -53,6 +52,10 @@ export const CarStore = signalStore(
       patchState(store, updaters.setSelectedCarId(id));
     },
 
+    setSelectedCarIdToBeDeleted(id: number | undefined | null) {
+      patchState(store, updaters.setSelectedCarIdToBeDeleted(id));
+    },
+
     openEditModal(carId: number | undefined) {
       patchState(store, updaters.openEditModal(carId));
     },
@@ -89,13 +92,13 @@ export const CarStore = signalStore(
       patchState(store, updaters.openAddModal());
     },
 
-    // addCar(newCar: Car) {
-    //   patchState(store, (currentState) => ({
-    //     cars: [...currentState.cars, newCar],
-    //     isCreating: false,
-    //     error: undefined
-    //   }));
-    // },
+    closeDeleteModal(){
+      patchState(store, updaters.closeDeleteModal());
+    },
+
+    openDeleteModal(){
+      patchState(store, updaters.openDeleteModal());
+    },
 
     // updateCarInList(updatedCar: Car) {
     //   patchState(store, (currentState) => ({
@@ -162,7 +165,31 @@ export const CarStore = signalStore(
           )
         )
       )
-    )
+    ),
+
+    deleteCar: rxMethod<number>(
+      pipe(
+        tap(() => patchState(store, { isDeleting: true, error: undefined })),
+        switchMap((carId: number) =>
+          store.http.delete<Car>(environment.apiUrl + '/cars/' + carId).pipe(
+            first(),
+            tapResponse({
+              next: (value) => {
+                patchState(store, (currentState) => ({
+                  cars: [...currentState.cars.filter(car => car.carId != carId)],
+                  isDeleting: false,
+                  error: undefined
+                }));
+                store.closeDeleteModal();
+              },
+              error: (err: any) => {
+                patchState(store, { error: err.message, isDeleting: false });
+              }
+            })
+          )
+        )
+      )
+    ),
   })),
   withHooks(({ loadAllCars }) => ({
     onInit: () => {

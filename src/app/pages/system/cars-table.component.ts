@@ -8,6 +8,7 @@ import { CarStore } from "../../store/car.store";
 import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 import { AddCarModal } from "./add-car-modal.component";
+import { DeleteCarModal } from "./delete-car-modal.component";
 
 @Component({
   selector: 'atp-cars-table',
@@ -16,7 +17,6 @@ import { AddCarModal } from "./add-car-modal.component";
 
     <section class="filters">
       <div class="filters__input-container">
-
         <button class="btn btn__icon btn__brd-light" (click)="this.store.openAddModal()">
           <atp-add-svg/>
         </button>
@@ -55,7 +55,7 @@ import { AddCarModal } from "./add-car-modal.component";
               <button class="btn btn__icon">
                 <atp-edit-svg/>
               </button>
-              <button class="btn btn__icon">
+              <button class="btn btn__icon" (click)="store.setSelectedCarIdToBeDeleted(car.carId); store.openDeleteModal();">
                 <atp-delete-svg/>
               </button>
             </td>
@@ -64,7 +64,7 @@ import { AddCarModal } from "./add-car-modal.component";
                 @if(typeof car[key] === 'boolean'){
                   {{ car[key] ? 'Yes' : 'No' }}
                 }
-                @else if(store.isDate(car[key])){
+                @else if(store.isDate(car[key]) && key != 'softwareVersion'){
                   {{ car[key] | date:'dd/MM/yy'}}
                 }
                 @else if(key == 'transmission'){
@@ -91,15 +91,15 @@ import { AddCarModal } from "./add-car-modal.component";
     @if(store.isAddModalOpen()){
       <atp-add-car-modal/>
     }
+
+    @if(store.isDeleteModalOpen()){
+      <atp-delete-car-modal/>
+    }
   `,
-  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, AddCarModal]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, AddCarModal, DeleteCarModal]
 })
 export class CarsTableComponent {
 
   store = inject(CarStore);
-
-  constructor(){
-    console.log('cars', this.store.vm().filteredCars)
-  }
 
 }

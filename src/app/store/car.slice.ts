@@ -6,14 +6,17 @@ export type CarSlice = {
   readonly error: string | undefined;
   readonly searchWord: string;
   readonly selectedCarId: number | undefined;
+  readonly selectedCarIdToBeDeleted: number | undefined;
   readonly isEditModalOpen: boolean;
   readonly isAddModalOpen: boolean;
+  readonly isDeleteModalOpen: boolean;
   readonly isHistoryModalOpen: boolean;
   readonly selectedCarHistory:  History[]| undefined;
   readonly historyLoading: boolean;
   readonly historyError: string| undefined;
   readonly isCreating: boolean;
   readonly isUpdating: boolean;
+  readonly isDeleting: boolean;
   readonly carGeneralKeys: (keyof Car)[];
   readonly carSalesKeys: (keyof Car)[];
   readonly carTechKeys: (keyof Car)[];
@@ -27,14 +30,17 @@ export const initialCarSlice: CarSlice = {
   error: undefined,
   searchWord: '',
   selectedCarId: undefined,
+  selectedCarIdToBeDeleted: undefined,
   isEditModalOpen: false,
   isAddModalOpen: false,
+  isDeleteModalOpen: false,
   isHistoryModalOpen: false,
   selectedCarHistory: undefined,
   historyLoading: false,
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
+  isDeleting: false,
   carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'brand', 'model', 'year', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
   carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],

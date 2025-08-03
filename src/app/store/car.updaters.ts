@@ -22,6 +22,10 @@ export function setSelectedCarId(id: number | undefined | null): PartialStateUpd
   return _ => ({ selectedCarId: id == null ? undefined : id })
 }
 
+export function setSelectedCarIdToBeDeleted(id: number | undefined | null): PartialStateUpdater<CarSlice>{
+  return _ => ({ selectedCarIdToBeDeleted: id == null ? undefined : id })
+}
+
 export function openEditModal(carId: number | undefined): PartialStateUpdater<CarSlice>{
   return _ => ({ isEditModalOpen: true, selectedCarId: carId })
 }
@@ -56,6 +60,14 @@ export function closeAddModal(): PartialStateUpdater<CarSlice>{
 
 export function openAddModal(): PartialStateUpdater<CarSlice>{
   return _ => ({ isAddModalOpen: true })
+}
+
+export function closeDeleteModal(): PartialStateUpdater<CarSlice>{
+  return _ => ({ isDeleteModalOpen: false })
+}
+
+export function openDeleteModal(): PartialStateUpdater<CarSlice>{
+  return _ => ({ isDeleteModalOpen: true })
 }
 
 export function isDate(value: any){

@@ -4,6 +4,8 @@ import { routes } from './app.routes';
 import { AuthHttpInterceptor, provideAuth0 } from '@auth0/auth0-angular';
 import { environment } from './environments/environment.prod';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withFetch } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,6 +32,12 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor, // Use the class directly
       multi: true // Essential for providing multiple interceptors
-    }
+    },
+    provideAnimations(), // required animations providers
+    provideToastr({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-left',
+      preventDuplicates: true,
+    }), // Toastr providers
   ]
 };

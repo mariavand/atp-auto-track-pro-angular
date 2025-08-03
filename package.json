@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular-architects/ngrx-toolkit": "^19.1.0",
+    "@angular/animations": "^20.1.0",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
@@ -40,14 +41,15 @@
     "typescript": "~5.8.3"
   },
   "overrides": {
-    "ngrx/store": {
+    "@ngrx/store": {
       "@angular/core": "^20.1.0"
     },
     "@angular-architects/ngrx-toolkit": {
       "@angular/core": "^20.1.0"
     },
     "ngx-toastr": {
-      "@angular/core": "^20.1.0"
+      "@angular/core": "^20.1.0",
+      "@angular/animations": "^20.1.0"
     }
   }
 }

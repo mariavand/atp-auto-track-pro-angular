@@ -33,5 +33,5 @@ export const initialColumnsSlice: ColumnsSlice = {
     brand: true,
     year: true,
   },
-  carKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'paymentStatus', 'status', 'color', 'generalComments', 'buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments', 'softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
+  carKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'brand', 'model', 'year', 'paymentStatus', 'status', 'color', 'generalComments', 'buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments', 'softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'seats', 'transmission', 'gps', 'bluetooth', 'techComments'],
 }

@@ -30,6 +30,9 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
               <button class="btn btn__icon btn__brd-light">
                 <atp-history-view-svg [fill]="'#F3F3F3'" [stroke]="'#F3F3F3'"/>
               </button>
+              <button class="btn btn__icon btn__brd-light">
+                <atp-edit-svg [stroke]="'#F3F3F3'"/>
+              </button>
             </span>
             <span>
               Last Update Date: {{ car.lastUpdateDate | date:'dd/MM/yy HH:mm' }}
@@ -42,11 +45,6 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
               <h2 class="justify-between px-1">
                 <span>
                   General
-                </span>
-                <span>
-                  <button class="btn btn__icon btn__brd-light">
-                    <atp-edit-svg [stroke]="'#F3F3F3'"/>
-                  </button>
                 </span>
               </h2>
             </div>
@@ -71,11 +69,6 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
               <h2 class="justify-between px-1">
                 <span>
                   Sales
-                </span>
-                <span>
-                  <button class="btn btn__icon btn__brd-light">
-                    <atp-edit-svg [stroke]="'#F3F3F3'"/>
-                  </button>
                 </span>
               </h2>
             </div>
@@ -113,11 +106,6 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
               <h2 class="justify-between px-1">
                 <span>
                   Tech
-                </span>
-                <span>
-                  <button class="btn btn__icon btn__brd-light">
-                    <atp-edit-svg [stroke]="'#F3F3F3'"/>
-                  </button>
                 </span>
               </h2>
             </div>

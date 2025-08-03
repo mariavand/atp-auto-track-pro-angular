@@ -1,18 +1,24 @@
 import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { CarStore } from '../../store/car.store';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { first, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 import { HistoryViewSvgComponent } from "../../shared/utilities/svgs/history-view-svg.component";
+import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.component";
 
 @Component({
   selector: 'atp-car-view',
-  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent],
+  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent, ReturnSVGComponent, RouterModule],
   template: `
   @let car = store.vm().selectedCar;
   @if(car){
+    <div class="actions p-2">
+      <a class="link btn link__icon link__light link__block" [routerLink]="['/system']">
+        <atp-return-svg/>
+      </a>
+    </div>
     <div class="container">
       <div class="card">
         <div class="card__header">

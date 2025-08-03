@@ -48,8 +48,7 @@ export class CustomSelectComponent implements ControlValueAccessor{
   isOpen = signal(false);
   selectedValue = signal<any>(null);
   selectedLabel = computed(() => {
-    const currentVal = this.selectedValue();
-    const selected = this.options().find(o => o.value === currentVal);
+    const selected = this.options().find(o => o.value === this.selectedValue());
     return selected ? selected.label : '';
   });
 
@@ -113,9 +112,6 @@ export class CustomSelectComponent implements ControlValueAccessor{
   }
 
   onDocumentClick(event: MouseEvent){
-    console.log(this.el.nativeElement.contains(event.target));
-    console.log(this.el.nativeElement);
-    console.log(event.target);
     if (!this.el.nativeElement.contains(event.target) && this.isOpen()) {
       this.isOpen.set(false);
       this.onTouch(); // Mark as touched when clicking outside

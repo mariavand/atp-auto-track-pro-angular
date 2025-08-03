@@ -1,7 +1,7 @@
 import { Component, computed, inject, Signal } from "@angular/core";
 import { CloseSVGComponent } from "../../shared/utilities/svgs/close-svg.component";
 import { CarStore } from "../../store/car.store";
-import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { SidebarStore } from "../../shared/layout/store/sidebar.store";
 import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
 import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
@@ -118,7 +118,7 @@ import { first } from "rxjs";
               </div>
 
               <div class="carForm__actions">
-                <button class="btn__submit btn__action" type="click" (click)="addNewVessel()">
+                <button class="btn__submit btn__action" type="click" (click)="addNewCar()">
                   <div class="btn__text-wrapper">
                     Save
                   </div>
@@ -191,7 +191,7 @@ export class AddCarModal{
         this.form.addControl(m, this.#fb.control(false));
       }
       else{
-        this.form.addControl(m, this.#fb.control(''));
+        this.form.addControl(m, this.#fb.control('', [Validators.required]));
       }
     });
   }
@@ -200,7 +200,7 @@ export class AddCarModal{
     return this.form.get(k) as FormControl;
   }
 
-  addNewVessel(){
+  addNewCar(){
     let car = {} as Omit<Car, 'carId'>;
 
     car = this.form.value as Omit<Car, 'carId'>;

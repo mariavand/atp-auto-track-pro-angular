@@ -1,7 +1,7 @@
-import { Component, computed, inject, signal, Signal, WritableSignal } from "@angular/core";
+import { Component, computed, inject, Signal } from "@angular/core";
 import { CloseSVGComponent } from "../../shared/utilities/svgs/close-svg.component";
 import { CarStore } from "../../store/car.store";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { SidebarStore } from "../../shared/layout/store/sidebar.store";
 import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
 import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
@@ -162,14 +162,14 @@ export class AddCarModal{
   ];
 
   paymentStatusOptions = [
-    { label: 'Not Paid', value: 'notPaid' },
-    { label: 'In progress', value: 'inProg' },
-    { label: 'Paid', value: 'paid' },
+    { label: 'Not Paid', value: 'Not Paid' },
+    { label: 'In progress', value: 'In progress' },
+    { label: 'Paid', value: 'Paid' },
   ];
 
   statusOptions = [
-    { label: 'Available', value: 'available' },
-    { label: 'Not Available', value: 'notAvailable' },
+    { label: 'Available', value: 'Available' },
+    { label: 'Not Available', value: 'Not Available' },
   ];
 
   transmissionOptions = [
@@ -178,10 +178,10 @@ export class AddCarModal{
   ];
 
   fuelTypeOptions = [
-    { label: 'Electric', value: 'electric' },
-    { label: 'Hybrid', value: 'hybrid' },
-    { label: 'Diesel', value: 'diesel' },
-    { label: 'Gasoline', value: 'gasoline' },
+    { label: 'Electric', value: 'Electric' },
+    { label: 'Hybrid', value: 'Hybrid' },
+    { label: 'Diesel', value: 'Diesel' },
+    { label: 'Gasoline', value: 'Gasoline' },
   ];
 
   constructor(){
@@ -194,7 +194,6 @@ export class AddCarModal{
         this.form.addControl(m, this.#fb.control(''));
       }
     });
-    console.log('this.form', this.form);
   }
 
   f(k: string): FormControl {

@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { AuthHttpInterceptor, provideAuth0 } from '@auth0/auth0-angular';
@@ -7,8 +7,8 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withFetch
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // provideZoneChangeDetection({ eventCoalescing: true }),
-    provideZonelessChangeDetection(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    // provideZonelessChangeDetection(),
     provideRouter(routes),
     provideAuth0({
       domain: 'dev-s0fcza4jc8t1ucnt.eu.auth0.com',

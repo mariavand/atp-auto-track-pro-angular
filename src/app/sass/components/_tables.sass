@@ -21,7 +21,7 @@
 
   &__tr
     &:nth-child(odd)
-      background-color: adjust-color($secondary, $lightness: 35%)
+      background-color: adjust-color($secondary, $lightness: 40%)
     &:nth-child(even)
       background-color: adjust-color($secondary, $lightness: 55%)
     &:nth-child(1)
@@ -30,6 +30,6 @@
       background-blend-mode: multiply
       color: $light
     &:hover:not(:nth-child(1))
-      background-color: rgba($light, .7)
+      background-color: rgba($teal, .4)
       background-image: linear-gradient(to top, rgba($teal, .2), rgba($light, .7))
       background-blend-mode: multiply

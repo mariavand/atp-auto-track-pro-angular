@@ -1,10 +1,14 @@
-import { Component, computed, inject } from "@angular/core";
+import { Component, computed, inject, signal, Signal, WritableSignal } from "@angular/core";
 import { CloseSVGComponent } from "../../shared/utilities/svgs/close-svg.component";
 import { CarStore } from "../../store/car.store";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SidebarStore } from "../../shared/layout/store/sidebar.store";
 import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
 import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
+import { Car } from "../../shared/models/car.model";
+import { AuthService, User } from "@auth0/auth0-angular";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { first } from "rxjs";
 
 @Component({
   selector: 'atp-add-car-modal',
@@ -18,7 +22,7 @@ import { CustomSelectComponent } from "../../shared/utilities/components/custom-
                 Add New Car
               </span>
               <span>
-                <button class="btn btn__icon btn__brd-light" (click)="closeModal()">
+                <button class="btn btn__icon btn__brd-light" (click)="store.closeAddModal()">
                   <atp-close-svg/>
                 </button>
               </span>
@@ -33,23 +37,19 @@ import { CustomSelectComponent } from "../../shared/utilities/components/custom-
                   </h2>
                 </div>
                 <div class="card__body">
-                  <div class="carForm__control">
-                    <label class="carForm__control__label" for="{{'test'}}">{{ 'Seats' + ': ' }}</label>
-                    <atp-custom-select id="{{'test'}}" [options]="options"/>
-                  </div>
                   @for(k of generalKeys(); track k){
-                    @if(k.includes('Comment')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
-                      </div>
-                    }
-                    @else {
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                    <div class="carForm__control">
+                      <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      @if(k.includes('Comment')){
+                        <textarea class="carForm__control__textarea" formControlName="{{k}}" name="{{k}}" id="{{k}}"></textarea>
+                      }
+                      @else if(k.includes('status')){
+                        <atp-custom-select id="{{k}}" formControlName="{{k}}" [options]="statusOptions"/>
+                      }
+                      @else {
                         <input class="carForm__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
-                      </div>
-                    }
+                      }
+                    </div>
                   }
                 </div>
               </div>
@@ -62,24 +62,21 @@ import { CustomSelectComponent } from "../../shared/utilities/components/custom-
                 </div>
                 <div class="card__body">
                   @for(k of store.carSalesKeys(); track k){
-                    @if(k.includes('Comment')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
-                      </div>
-                    }
-                    @else if(k.includes('buyingDay')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                    <div class="carForm__control">
+                      <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      @if(k.includes('Comment')){
+                        <textarea class="carForm__control__textarea" formControlName="{{k}}" name="{{k}}" id="{{k}}"></textarea>
+                      }
+                      @else if(k.includes('paymentStatus')){
+                        <atp-custom-select id="{{k}}" formControlName="{{k}}" [options]="paymentStatusOptions"/>
+                      }
+                      @else if(k.includes('buyingDay')){
                         <input class="carForm__control__inputText" type="date" formControlName="{{k}}" name="{{k}}">
-                      </div>
-                    }
-                    @else {
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      }
+                      @else {
                         <input class="carForm__control__inputText" type="text" formControlName="{{k}}" name="{{k}}">
-                      </div>
-                    }
+                      }
+                    </div>
                   }
                 </div>
               </div>
@@ -92,32 +89,45 @@ import { CustomSelectComponent } from "../../shared/utilities/components/custom-
                 </div>
                 <div class="card__body">
                   @for(k of store.carTechKeys(); track k){
-                    @if(k.includes('airConditioning') || k.includes('gps') || k.includes('bluetooth')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <atp-custom-toggle [name]="k"/>
-                      </div>
-                    }
-                    @else if(k.includes('batteryChangeDate')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                    <div class="carForm__control">
+                      <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      @if(k.includes('airConditioning') || k.includes('gps') || k.includes('bluetooth')){
+                        <atp-custom-toggle [name]="k" formControlName="{{k}}"/>
+                      }
+                      @else if(k.includes('batteryChangeDate')){
                         <input class="carForm__control__inputText" type="date" formControlName="{{k}}" name="{{k}}">
-                      </div>
-                    }
-                    @else if(k.includes('Comment')){
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
-                        <textarea class="carForm__control__textarea" name="{{k}}" id="{{k}}"></textarea>
-                      </div>
-                    }
-                    @else {
-                      <div class="carForm__control">
-                        <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
+                      }
+                      @else if(k.includes('fuelType')){
+                        <atp-custom-select id="{{k}}" formControlName="{{k}}" [options]="fuelTypeOptions"/>
+                      }
+                      @else if(k.includes('seats')){
+                        <atp-custom-select id="{{k}}" formControlName="{{k}}" [options]="seatsOptions"/>
+                      }
+                      @else if(k.includes('transmission')){
+                        <atp-custom-select id="{{k}}" formControlName="{{k}}" [options]="transmissionOptions"/>
+                      }
+                      @else if(k.includes('Comment')){
+                        <textarea class="carForm__control__textarea" formControlName="{{k}}" name="{{k}}" id="{{k}}"></textarea>
+                      }
+                      @else {
                         <input class="carForm__control__inputText" type="text" formControlName="{{k}}" id="{{k}}">
-                      </div>
-                    }
+                      }
+                    </div>
                   }
                 </div>
+              </div>
+
+              <div class="carForm__actions">
+                <button class="btn__submit btn__action" type="click" (click)="addNewVessel()">
+                  <div class="btn__text-wrapper">
+                    Save
+                  </div>
+                </button>
+                <button class="btn__cancel btn__action" type="click" (click)="store.closeAddModal()">
+                  <div class="btn__text-wrapper">
+                    Cancel
+                  </div>
+                </button>
               </div>
             </form>
           </div>
@@ -131,6 +141,9 @@ export class AddCarModal{
 
   store = inject(CarStore);
   sidebarStore = inject(SidebarStore);
+  authService = inject(AuthService);
+
+  user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(first()));
 
   #fb = inject(FormBuilder);
 
@@ -140,22 +153,43 @@ export class AddCarModal{
 
   form = this.#fb.group({});
 
-  options = [
+  seatsOptions = [
     { label: '1 seat', value: 1 },
     { label: '2 seats', value: 2 },
-    { label: '3 seats', value: 3 }
-  ]
+    { label: '3 seats', value: 3 },
+    { label: '4 seats', value: 4 },
+    { label: '5 seats', value: 5 }
+  ];
+
+  paymentStatusOptions = [
+    { label: 'Not Paid', value: 'notPaid' },
+    { label: 'In progress', value: 'inProg' },
+    { label: 'Paid', value: 'paid' },
+  ];
+
+  statusOptions = [
+    { label: 'Available', value: 'available' },
+    { label: 'Not Available', value: 'notAvailable' },
+  ];
+
+  transmissionOptions = [
+    { label: 'Manual', value: 0 },
+    { label: 'Automatic', value: 1 },
+  ];
+
+  fuelTypeOptions = [
+    { label: 'Electric', value: 'electric' },
+    { label: 'Hybrid', value: 'hybrid' },
+    { label: 'Diesel', value: 'diesel' },
+    { label: 'Gasoline', value: 'gasoline' },
+  ];
 
   constructor(){
-    console.log('this.keys', this.keys);
     this.keys.forEach((m) => {
       console.log('m', m);
       if(m.includes('airConditioning') || m.includes('gps') || m.includes('blutooth')){
         this.form.addControl(m, this.#fb.control(false));
       }
-      // else if(m.includes('')){
-
-      // }
       else{
         this.form.addControl(m, this.#fb.control(''));
       }
@@ -167,8 +201,15 @@ export class AddCarModal{
     return this.form.get(k) as FormControl;
   }
 
-  closeModal(){
-    this.store.closeAddModal();
+  addNewVessel(){
+    let car = {} as Omit<Car, 'carId'>;
+
+    car = this.form.value as Omit<Car, 'carId'>;
+    car = {...car, editedBy: this.user()?.name as string};
+    car = {...car, lastUpdateDate: new Date()}
+    car = {...car, lockedBy: ' '}
+
+    this.store.addNewCar(car);
   }
 
 }

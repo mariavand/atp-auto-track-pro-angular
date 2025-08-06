@@ -1,4 +1,4 @@
-import { Car } from "../shared/models/car.model";
+import { Car, History } from "../shared/models/car.model";
 import { CarSlice } from "./car.slice";
 import { PartialStateUpdater } from "@ngrx/signals";
 

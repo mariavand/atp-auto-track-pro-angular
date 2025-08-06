@@ -21,5 +21,4 @@ export type AbstractCar = {
   readonly color: string;
   readonly lastUpdateDate: Date;
   readonly editedBy: string;
-  readonly lockedBy: string;
 }

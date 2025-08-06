@@ -1,4 +1,4 @@
-import { Car, CarColumnKey } from "../shared/models/car.model"
+import { Car, History } from "../shared/models/car.model"
 
 export type CarSlice = {
   readonly cars: Car[];
@@ -16,6 +16,7 @@ export type CarSlice = {
   readonly historyError: string| undefined;
   readonly isCreating: boolean;
   readonly isUpdating: boolean;
+  readonly isAddingToHistory: boolean;
   readonly isDeleting: boolean;
   readonly carGeneralKeys: (keyof Car)[];
   readonly carSalesKeys: (keyof Car)[];
@@ -40,6 +41,7 @@ export const initialCarSlice: CarSlice = {
   historyError: undefined,
   isCreating: false,
   isUpdating: false,
+  isAddingToHistory: false,
   isDeleting: false,
   carGeneralKeys: ['carId', 'ownerNameSurname', 'serialNumber', 'brand', 'model', 'year', 'status', 'color', 'generalComments'],
   carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],

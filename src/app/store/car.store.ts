@@ -5,9 +5,9 @@ import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { CarsService } from '../shared/services/cars.service';
-import { Car } from '../shared/models/car.model';
+import { Car, History } from '../shared/models/car.model';
 import { Router } from '@angular/router';
-import { first, pipe, switchMap, tap } from 'rxjs';
+import { concatMap, first, of, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment.prod';
@@ -183,32 +183,83 @@ export const CarStore = signalStore(
       )
     ),
 
-    saveEditedCar: rxMethod<Omit<Car, 'carId'>>(
+    saveEditedCar: rxMethod<{ old: Omit<History, 'historyId'>, new: Omit<Car, 'carId'> }>(
       pipe(
+        tap(() => patchState(store, { isAddingToHistory: true, error: undefined })),
         tap(() => patchState(store, { isUpdating: true, error: undefined })),
-        switchMap((carData) =>
-          store.http.put<Car>(environment.apiUrl + '/cars/' + store.selectedCarId, carData).pipe(
+        switchMap((carData) => {
+          let concatApis = store.http.post<Car>(environment.apiUrl + '/history', carData.old).pipe(
             first(),
             tapResponse({
-              next: (editedCar) => {
-                patchState(store, (currentState) => ({
-                  cars: [...currentState.cars, editedCar],
-                  isUpdating: false,
+              next: () => {
+                patchState(store, () => ({
+                  isAddingToHistory: false,
                   error: undefined,
-                  selectedCarId: editedCar.carId
                 }));
-                store.closeAddModal();
               },
               error: (err: any) => {
                 console.log('err', err);
                 store.toastr.error('Something went wrong!', err.statusText);
-                patchState(store, { error: err.message, isUpdating: false });
+                patchState(store, { error: err.message, isAddingToHistory: false });
               }
             })
           )
+
+          return concatApis.pipe(
+            concatMap(() =>
+              store.http.put<Car>(environment.apiUrl + '/cars/' + store.selectedCarId()!, carData.new).pipe(
+                first(),
+                tapResponse({
+                  next: (editedCar) => {
+                    let cars = store.cars().filter((c) => c.carId != store.selectedCarId())
+                    patchState(store, () => ({
+                      cars: [...cars, editedCar],
+                      isUpdating: false,
+                      error: undefined,
+                      selectedCarId: editedCar.carId
+                    }));
+                    store.closeEditModal();
+                  },
+                  error: (err: any) => {
+                    console.log('err', err);
+                    store.toastr.error('Something went wrong!', err.statusText);
+                    patchState(store, { error: err.message, isUpdating: false });
+                  }
+                })
+              )
+            )
+          );
+        }
+
+
+
         )
       )
     ),
+
+    // addHistory: rxMethod<Omit<Car, 'carId'>>(
+    //   pipe(
+    //     tap(() => patchState(store, { isAddingToHistory: true, error: undefined })),
+    //     switchMap((oldCarData) =>
+    //       store.http.post<Car>(environment.apiUrl + '/cars', oldCarData).pipe(
+    //         first(),
+    //         tapResponse({
+    //           next: () => {
+    //             patchState(store, () => ({
+    //               isAddingToHistory: false,
+    //               error: undefined,
+    //             }));
+    //           },
+    //           error: (err: any) => {
+    //             console.log('err', err);
+    //             store.toastr.error('Something went wrong!', err.statusText);
+    //             patchState(store, { error: err.message, isAddingToHistory: false });
+    //           }
+    //         })
+    //       )
+    //     )
+    //   )
+    // )
   })),
   withHooks(({ loadAllCars }) => ({
     onInit: () => {

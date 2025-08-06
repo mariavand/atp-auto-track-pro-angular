@@ -5,13 +5,13 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angu
 import { SidebarStore } from "../../shared/layout/store/sidebar.store";
 import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
 import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
-import { Car } from "../../shared/models/car.model";
+import { Car, History } from "../../shared/models/car.model";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { first } from "rxjs";
 
 @Component({
-  selector: 'atp-add-car-modal',
+  selector: 'atp-mng-car-modal',
   template: `
     <section class="modal">
       <div class="modal__container">
@@ -19,10 +19,10 @@ import { first } from "rxjs";
           <div class="card__header">
             <h2 class="justify-between px-1">
               <span>
-                Add New Car
+                {{ store.isAddModalOpen() ? 'Add New Car' : 'Edit Car'}}
               </span>
               <span>
-                <button class="btn btn__icon btn__brd-light" (click)="store.closeAddModal()">
+                <button class="btn btn__icon btn__brd-light" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal()">
                   <atp-close-svg/>
                 </button>
               </span>
@@ -118,12 +118,12 @@ import { first } from "rxjs";
               </div>
 
               <div class="carForm__actions">
-                <button class="btn__submit btn__action" type="click" (click)="addNewCar()">
+                <button class="btn__submit btn__action" type="click" (click)="saveCar()">
                   <div class="btn__text-wrapper">
                     Save
                   </div>
                 </button>
-                <button class="btn__cancel btn__action" type="click" (click)="store.closeAddModal()">
+                <button class="btn__cancel btn__action" type="click" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal()">
                   <div class="btn__text-wrapper">
                     Cancel
                   </div>
@@ -137,7 +137,7 @@ import { first } from "rxjs";
   `,
   imports: [CloseSVGComponent, ReactiveFormsModule, CustomToggleComponent, CustomSelectComponent]
 })
-export class AddCarModal{
+export class MngCarModal{
 
   store = inject(CarStore);
   sidebarStore = inject(SidebarStore);
@@ -152,6 +152,46 @@ export class AddCarModal{
   generalKeys = computed(() => this.store.carGeneralKeys().filter(value => value != 'carId'));
 
   form = this.#fb.group({});
+
+  selectedCar = computed(() => this.store.vm().selectedCar)
+
+  constructor(){
+    this.keys.forEach((m) => {
+      if(m.includes('airConditioning') || m.includes('gps') || m.includes('blutooth')){
+        this.form.addControl(m, this.#fb.control(this.selectedCar()[m] ?? false));
+      }
+      else{
+        if(!m.includes('Comments')){
+          this.form.addControl(m, this.#fb.control(this.selectedCar()[m] ?? '', [Validators.required]));
+        }
+        else{
+          this.form.addControl(m, this.#fb.control(this.selectedCar()[m] ?? '', []));
+        }
+      }
+    });
+  }
+
+  f(k: string): FormControl {
+    return this.form.get(k) as FormControl;
+  }
+
+  saveCar(){
+    let car: Omit<Car, 'carId'> = {} as Omit<Car, 'carId'>;
+
+    car = this.form.value as Omit<Car, 'carId'>;
+    car = {...car, editedBy: this.user()?.name as string};
+    car = {...car, lastUpdateDate: new Date()};
+    car = {...car, lockedBy: ' '};
+    console.log('this.store.isAddModalOpen()', this.store.isAddModalOpen());
+    if(this.store.isAddModalOpen()){
+      this.store.addNewCar(car);
+    }
+    else{
+      let originalCar = this.selectedCar();
+      const { seats, model, brand, year, ...old } = originalCar;
+      this.store.saveEditedCar({ old, new: car });
+    }
+  }
 
   seatsOptions = [
     { label: '1 seat', value: 1 },
@@ -183,32 +223,5 @@ export class AddCarModal{
     { label: 'Diesel', value: 'Diesel' },
     { label: 'Gasoline', value: 'Gasoline' },
   ];
-
-  constructor(){
-    this.keys.forEach((m) => {
-      console.log('m', m);
-      if(m.includes('airConditioning') || m.includes('gps') || m.includes('blutooth')){
-        this.form.addControl(m, this.#fb.control(false));
-      }
-      else{
-        this.form.addControl(m, this.#fb.control('', [Validators.required]));
-      }
-    });
-  }
-
-  f(k: string): FormControl {
-    return this.form.get(k) as FormControl;
-  }
-
-  addNewCar(){
-    let car = {} as Omit<Car, 'carId'>;
-
-    car = this.form.value as Omit<Car, 'carId'>;
-    car = {...car, editedBy: this.user()?.name as string};
-    car = {...car, lastUpdateDate: new Date()}
-    car = {...car, lockedBy: ' '}
-
-    this.store.addNewCar(car);
-  }
 
 }

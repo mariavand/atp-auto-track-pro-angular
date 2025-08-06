@@ -7,8 +7,8 @@ import { RouterModule } from "@angular/router";
 import { CarStore } from "../../store/car.store";
 import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
-import { AddCarModal } from "./add-car-modal.component";
 import { DeleteCarModal } from "./delete-car-modal.component";
+import { MngCarModal } from "./mng-car-modal.component";
 
 @Component({
   selector: 'atp-cars-table',
@@ -52,7 +52,7 @@ import { DeleteCarModal } from "./delete-car-modal.component";
               <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                 <atp-view-svg/>
               </a>
-              <button class="btn btn__icon">
+              <button class="btn btn__icon" (click)="this.store.openEditModal(car.carId)">
                 <atp-edit-svg/>
               </button>
               <button class="btn btn__icon" (click)="store.setSelectedCarIdToBeDeleted(car.carId); store.openDeleteModal();">
@@ -88,15 +88,15 @@ import { DeleteCarModal } from "./delete-car-modal.component";
 
     </div>
 
-    @if(store.isAddModalOpen()){
-      <atp-add-car-modal/>
+    @if(store.isAddModalOpen() || store.isEditModalOpen()){
+      <atp-mng-car-modal/>
     }
 
     @if(store.isDeleteModalOpen()){
       <atp-delete-car-modal/>
     }
   `,
-  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, AddCarModal, DeleteCarModal]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, DeleteCarModal, MngCarModal]
 })
 export class CarsTableComponent {
 

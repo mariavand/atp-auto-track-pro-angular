@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 import { HistoryViewSvgComponent } from "../../shared/utilities/svgs/history-view-svg.component";
 import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.component";
+import { MngCarModal } from "./mng-car-modal.component";
 
 @Component({
   selector: 'atp-car-view',
-  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent, ReturnSVGComponent, RouterModule],
+  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent, ReturnSVGComponent, RouterModule, MngCarModal],
   template: `
   @let car = store.vm().selectedCar;
   @if(car){
@@ -30,7 +31,7 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
               <button class="btn btn__icon btn__brd-light">
                 <atp-history-view-svg [fill]="'#F3F3F3'" [stroke]="'#F3F3F3'"/>
               </button>
-              <button class="btn btn__icon btn__brd-light">
+              <button class="btn btn__icon btn__brd-light" (click)="this.store.openEditModal(car.carId)">
                 <atp-edit-svg [stroke]="'#F3F3F3'"/>
               </button>
             </span>
@@ -139,6 +140,10 @@ import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.compo
         </div>
       </div>
     </div>
+
+    @if(store.isEditModalOpen()){
+      <atp-mng-car-modal/>
+    }
   }
   `,
   styles: [``],

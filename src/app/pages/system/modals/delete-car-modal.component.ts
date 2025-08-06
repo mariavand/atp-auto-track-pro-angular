@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core";
-import { CarStore } from "../../store/car.store";
-import { CloseSVGComponent } from "../../shared/utilities/svgs/close-svg.component";
+import { CloseSVGComponent } from "../../../shared/utilities/svgs/close-svg.component";
+import { CarStore } from "../../../store/car.store";
 
 @Component({
   selector: 'atp-delete-car-modal',

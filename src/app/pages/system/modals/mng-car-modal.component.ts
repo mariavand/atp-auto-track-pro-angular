@@ -1,11 +1,11 @@
 import { Component, computed, inject, Signal } from "@angular/core";
-import { CloseSVGComponent } from "../../shared/utilities/svgs/close-svg.component";
-import { CarStore } from "../../store/car.store";
+import { CloseSVGComponent } from "../../../shared/utilities/svgs/close-svg.component";
+import { CarStore } from "../../../store/car.store";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
-import { SidebarStore } from "../../shared/layout/store/sidebar.store";
-import { CustomToggleComponent } from "../../shared/utilities/components/custom-toggle.component";
-import { CustomSelectComponent } from "../../shared/utilities/components/custom-select.component";
-import { Car, History } from "../../shared/models/car.model";
+import { SidebarStore } from "../../../shared/layout/store/sidebar.store";
+import { CustomToggleComponent } from "../../../shared/utilities/components/custom-toggle.component";
+import { CustomSelectComponent } from "../../../shared/utilities/components/custom-select.component";
+import { Car, History } from "../../../shared/models/car.model";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { first } from "rxjs";

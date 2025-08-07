@@ -4,8 +4,7 @@ import { initialCarSlice } from './car.slice';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { CarsService } from '../shared/services/cars.service';
-import { Car, History } from '../shared/models/car.model';
+import { Car, History, HistoryCollection } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { concatMap, first, of, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
@@ -19,13 +18,11 @@ export const CarStore = signalStore(
   { providedIn: 'root' },
   withState(initialCarSlice),
   withProps((_) => {
-    const carsService = inject(CarsService);
     const router = inject(Router);
     const http = inject(HttpClient);
     const sidebarStore = inject(SidebarStore);
     const toastr = inject(ToastrService);
     return {
-      carsService,
       router,
       http,
       sidebarStore,

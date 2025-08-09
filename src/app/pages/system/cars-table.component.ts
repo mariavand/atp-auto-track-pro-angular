@@ -1,4 +1,4 @@
-import { Component, effect, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component";
 import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
@@ -7,8 +7,8 @@ import { RouterModule } from "@angular/router";
 import { CarStore } from "../../store/car.store";
 import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
-import { DeleteCarModal } from "./delete-car-modal.component";
-import { MngCarModal } from "./mng-car-modal.component";
+import { MngCarModal } from "./modals/mng-car-modal.component";
+import { DeleteCarModal } from "./modals/delete-car-modal.component";
 
 @Component({
   selector: 'atp-cars-table',
@@ -96,7 +96,7 @@ import { MngCarModal } from "./mng-car-modal.component";
       <atp-delete-car-modal/>
     }
   `,
-  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, DeleteCarModal, MngCarModal]
+  imports: [CommonModule, ViewSvgComponent, SearchSvgComponent, DeleteSvgComponent, RouterModule, AddSVGComponent, EditSvgComponent, MngCarModal, DeleteCarModal]
 })
 export class CarsTableComponent {
 

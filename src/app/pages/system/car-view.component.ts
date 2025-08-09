@@ -7,16 +7,18 @@ import { CommonModule } from '@angular/common';
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 import { HistoryViewSvgComponent } from "../../shared/utilities/svgs/history-view-svg.component";
 import { ReturnSVGComponent } from "../../shared/utilities/svgs/return-svg.component";
-import { MngCarModal } from "./mng-car-modal.component";
+import { MngCarModal } from "./modals/mng-car-modal.component";
+import { HistoryViewModalComponent } from "./modals/history-view-modal.component";
+import { HistoryStore } from './modals/store/history.store';
 
 @Component({
   selector: 'atp-car-view',
-  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent, ReturnSVGComponent, RouterModule, MngCarModal],
+  imports: [CommonModule, EditSvgComponent, HistoryViewSvgComponent, ReturnSVGComponent, RouterModule, MngCarModal, HistoryViewModalComponent],
   template: `
-  @let car = store.vm().selectedCar;
+  @let car = carStore.vm().selectedCar;
   @if(car){
     <div class="actions p-2">
-      <a class="link btn link__icon link__light link__block" [routerLink]="['/system']">
+      <a class="link btn link__icon link__light link__block" [routerLink]="['/system']" (click)="carStore.setSelectedCarId(undefined)">
         <atp-return-svg/>
       </a>
     </div>
@@ -28,10 +30,10 @@ import { MngCarModal } from "./mng-car-modal.component";
               Edited by: {{ car.editedBy }}
             </span>
             <span>
-              <button class="btn btn__icon btn__brd-light">
+              <button class="btn btn__icon btn__brd-light" (click)="historyStore.openHistoryModal(car.carId)">
                 <atp-history-view-svg [fill]="'#F3F3F3'" [stroke]="'#F3F3F3'"/>
               </button>
-              <button class="btn btn__icon btn__brd-light" (click)="this.store.openEditModal(car.carId)">
+              <button class="btn btn__icon btn__brd-light" (click)="carStore.openEditModal(car.carId)">
                 <atp-edit-svg [stroke]="'#F3F3F3'"/>
               </button>
             </span>
@@ -51,9 +53,9 @@ import { MngCarModal } from "./mng-car-modal.component";
             </div>
             <div class="card__body">
               <ul class="list">
-                @for(key of store.carGeneralKeys(); track key){
+                @for(key of carStore.carGeneralKeys(); track key){
                   <li class="list__item">
-                    <span class="list__item__title">{{ store.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">{{ car[key] }}</span>
+                    <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">{{ car[key] }}</span>
                   </li>
                 }
                 @empty {
@@ -75,13 +77,13 @@ import { MngCarModal } from "./mng-car-modal.component";
             </div>
             <div class="card__body">
               <ul class="list">
-                @for(key of store.carSalesKeys(); track key){
+                @for(key of carStore.carSalesKeys(); track key){
                   <li class="list__item">
-                    <span class="list__item__title">{{ store.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">
+                    <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">
                       @if(typeof car[key] === 'boolean'){
                         {{ car[key] ? 'Yes' : 'No' }}
                       }
-                      @else if(store.isDate(car[key])){
+                      @else if(carStore.isDate(car[key])){
                         {{ car[key] | date:'dd/MM/yy'}}
                       }
                       @else if(key == 'transmission'){
@@ -112,12 +114,12 @@ import { MngCarModal } from "./mng-car-modal.component";
             </div>
             <div class="card__body">
               <ul class="list">
-                @for(key of store.carTechKeys(); track key){
+                @for(key of carStore.carTechKeys(); track key){
                   <li class="list__item">
-                    <span class="list__item__title">{{ store.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">@if(typeof car[key] === 'boolean'){
+                    <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span><span class="list__item__value">@if(typeof car[key] === 'boolean'){
                         {{ car[key] ? 'Yes' : 'No' }}
                       }
-                      @else if(store.isDate(car[key])){
+                      @else if(carStore.isDate(car[key])){
                         {{ car[key] | date:'dd/MM/yy'}}
                       }
                       @else if(key == 'transmission'){
@@ -141,8 +143,12 @@ import { MngCarModal } from "./mng-car-modal.component";
       </div>
     </div>
 
-    @if(store.isEditModalOpen()){
+    @if(carStore.isEditModalOpen()){
       <atp-mng-car-modal/>
+    }
+
+    @if(carStore.isHistoryModalOpen()){
+      <atp-history-view-modal/>
     }
   }
   `,
@@ -150,14 +156,16 @@ import { MngCarModal } from "./mng-car-modal.component";
 })
 export class CarViewComponent {
 
-  store = inject(CarStore);
+  carStore = inject(CarStore);
+  historyStore = inject(HistoryStore);
   #route = inject(ActivatedRoute);
 
   carId = toSignal(this.#route.paramMap.pipe(
     first(),
     map((params) => {
       const id = Number(params.get('carId'));
-      this.store.setSelectedCarId(id)
+      this.carStore.setSelectedCarId(id);
+      this.historyStore.loadAllHistory();
       return id;
     })
   ));

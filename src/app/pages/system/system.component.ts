@@ -1,13 +1,16 @@
 import { Component } from "@angular/core";
+import { CarsTableComponent } from "./cars-table.component";
 
 @Component({
   selector: 'atp-system',
   standalone: true,
-  imports: [],
+  imports: [CarsTableComponent],
   template: `
+
+    <atp-cars-table/>
+
   `,
   styles: ``
 })
 export class SystemComponent {
-
 }

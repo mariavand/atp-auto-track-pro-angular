@@ -1,0 +1,24 @@
+.card
+  border-radius: 15px
+  border: 1px solid $secondary
+  box-shadow: 10px  10px 40px $secondary
+  overflow: hidden
+  margin: 2rem
+  padding: 0 5rem
+  transform: skew(-10deg)
+  background-color: rgba($light, .7)
+  background-image: linear-gradient(to bottom right, rgba($secondary, .55), rgba($light, .7))
+  &__header
+    background-color: rgba($teal, .8)
+    background-image: linear-gradient(to right, $teal, $blendTealPrimary, $primary, $blendPrimarySecondary, $secondary, $blendSecondaryLight, $light)
+    background-blend-mode: multiply
+    color: $light
+    padding: .5rem 1.3rem
+    margin: 0 -5.5rem
+    transform: skew(10deg)
+  &__body
+    transform: skew(10deg)
+    max-height: 60rem
+    color: $secondary
+    background-color: transparent
+    padding: 0 1rem

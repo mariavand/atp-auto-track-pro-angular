@@ -1,4 +1,4 @@
-import { Car, History } from "../shared/models/car.model";
+import { Car, History, HistoryCollection } from "../shared/models/car.model";
 import { CarSlice } from "./car.slice";
 import { PartialStateUpdater } from "@ngrx/signals";
 
@@ -32,26 +32,6 @@ export function openEditModal(carId: number | undefined): PartialStateUpdater<Ca
 
 export function closeEditModal(): PartialStateUpdater<CarSlice>{
   return _ => ({ isEditModalOpen: false, selectedCarId: undefined })
-}
-
-export function openHistoryModal(carId: number | undefined): PartialStateUpdater<CarSlice>{
-  return _ => ({ isHistoryModalOpen: true, selectedCarId: carId })
-}
-
-export function closeHistoryModal(): PartialStateUpdater<CarSlice>{
-  return _ => ({ isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined })
-}
-
-export function setCarHistory(history: History[]): PartialStateUpdater<CarSlice>{
-  return _ => ({ selectedCarHistory: history, historyLoading: false, historyError: undefined })
-}
-
-export function setHistoryLoading(loading: boolean): PartialStateUpdater<CarSlice>{
-  return _ => ({ historyLoading: loading })
-}
-
-export function setHistoryError(error: string | undefined): PartialStateUpdater<CarSlice>{
-  return _ => ({ historyError: error, historyLoading: false })
 }
 
 export function closeAddModal(): PartialStateUpdater<CarSlice>{

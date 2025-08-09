@@ -64,26 +64,6 @@ export const CarStore = signalStore(
       patchState(store, updaters.closeEditModal());
     },
 
-    openHistoryModal(carId: number | undefined) {
-      patchState(store, updaters.openHistoryModal(carId));
-    },
-
-    closeHistoryModal() {
-      patchState(store, updaters.closeHistoryModal());
-    },
-
-    setCarHistory(history: History[]) {
-      patchState(store, updaters.setCarHistory(history));
-    },
-
-    setHistoryLoading(loading: boolean) {
-      patchState(store, updaters.setHistoryLoading(loading));
-    },
-
-    setHistoryError(error: string | undefined) {
-      patchState(store, updaters.setHistoryError(error));
-    },
-
     closeAddModal(){
       patchState(store, updaters.closeAddModal());
     },
@@ -234,29 +214,25 @@ export const CarStore = signalStore(
       )
     ),
 
-    // addHistory: rxMethod<Omit<Car, 'carId'>>(
-    //   pipe(
-    //     tap(() => patchState(store, { isAddingToHistory: true, error: undefined })),
-    //     switchMap((oldCarData) =>
-    //       store.http.post<Car>(environment.apiUrl + '/cars', oldCarData).pipe(
-    //         first(),
-    //         tapResponse({
-    //           next: () => {
-    //             patchState(store, () => ({
-    //               isAddingToHistory: false,
-    //               error: undefined,
-    //             }));
-    //           },
-    //           error: (err: any) => {
-    //             console.log('err', err);
-    //             store.toastr.error('Something went wrong!', err.statusText);
-    //             patchState(store, { error: err.message, isAddingToHistory: false });
-    //           }
-    //         })
-    //       )
-    //     )
-    //   )
-    // )
+    loadAllHistory: rxMethod<number>(
+      pipe(
+        tap(() => patchState(store, { historyLoading: true, historyError: undefined })),
+        switchMap((carId: number) =>
+          store.http.get<HistoryCollection[]>(environment.apiUrl + '/history/' + carId).pipe(
+            first(),
+            tapResponse({
+              next: (historyCollection: HistoryCollection[]) => patchState(store, { selectedCarHistory: historyCollection, historyLoading: false }),
+              error: (err: any) => {
+                console.log('err', err);
+                store.toastr.error('Something went wrong!', err.statusText);;
+                patchState(store, { historyError: err.message, historyLoading: false })
+              },
+            })
+          )
+        )
+      )
+    ),
+
   })),
   withHooks(({ loadAllCars }) => ({
     onInit: () => {

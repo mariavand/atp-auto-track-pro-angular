@@ -27,13 +27,6 @@ import { HistoryStore } from './store/history.store';
             @for(carH of historyStore.selectedCarHistory(); track carH){
 
               @let currentCarHStatus = $index == 0 ? carStore.vm().selectedCar : historyStore.selectedCarHistory()![$index - 1];
-              <span>{{ $index }}</span>
-              <span>{{ historyStore.selectedCarHistory()!.length - 1 }}</span>
-              <span>{{ $index === historyStore.selectedCarHistory()!.length - 1 }}</span>
-              <br/>
-              <span>pio prosfato{{currentCarHStatus | json}} {{ $index }}</span>
-              <br/>
-              <span>paliotero{{carH | json}} {{ $index }}</span>
 
               <div class="card">
                 <div class="card__header">
@@ -134,10 +127,5 @@ export class HistoryViewModalComponent {
 
   historyStore = inject(HistoryStore);
   carStore = inject(CarStore);
-
-  constructor(){
-    console.log('carStore.vm().selectedCar', this.carStore.vm().selectedCar);
-    console.log('historyStore', this.historyStore.selectedCarHistory());
-  }
 
 }

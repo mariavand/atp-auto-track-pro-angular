@@ -147,7 +147,7 @@ import { HistoryStore } from './modals/store/history.store';
       <atp-mng-car-modal/>
     }
 
-    @if(carStore.isHistoryModalOpen()){
+    @if(historyStore.isHistoryModalOpen()){
       <atp-history-view-modal/>
     }
   }

@@ -1,4 +1,4 @@
-import { HistoryCollection } from "../../../../shared/models/car.model";
+import { Car, HistoryCollection } from "../../../../shared/models/car.model";
 
 export type HistorySlice = {
   readonly isEditModalOpen: boolean;
@@ -12,6 +12,9 @@ export type HistorySlice = {
   readonly isUpdating: boolean;
   readonly isAddingToHistory: boolean;
   readonly isDeleting: boolean;
+  readonly carGeneralKeys: (keyof Car)[];
+  readonly carSalesKeys: (keyof Car)[];
+  readonly carTechKeys: (keyof Car)[];
 }
 
 export const initialHistorySlice: HistorySlice = {
@@ -26,4 +29,7 @@ export const initialHistorySlice: HistorySlice = {
   isUpdating: false,
   isAddingToHistory: false,
   isDeleting: false,
+  carGeneralKeys: ['ownerNameSurname', 'serialNumber', 'status', 'color', 'generalComments'],
+  carSalesKeys: ['buyingDay', 'initialPrice', 'finalPrice', 'paymentStatus', 'salesComments'],
+  carTechKeys: ['softwareVersion', 'batteryChangeDate', 'airConditioning', 'fuelType', 'transmission', 'gps', 'bluetooth', 'techComments'],
 }

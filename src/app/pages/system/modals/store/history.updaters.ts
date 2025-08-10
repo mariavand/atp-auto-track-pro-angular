@@ -7,7 +7,7 @@ export function openHistoryModal(carId: number | undefined): PartialStateUpdater
 }
 
 export function closeHistoryModal(): PartialStateUpdater<HistorySlice>{
-  return _ => ({ isHistoryModalOpen: false, selectedCarId: undefined, selectedCarHistory: undefined })
+  return _ => ({ isHistoryModalOpen: false })
 }
 
 export function setCarHistory(history: HistoryCollection[]): PartialStateUpdater<HistorySlice>{

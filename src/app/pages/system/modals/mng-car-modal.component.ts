@@ -9,6 +9,7 @@ import { Car, History } from "../../../shared/models/car.model";
 import { AuthService, User } from "@auth0/auth0-angular";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { first } from "rxjs";
+import { HistoryStore } from "./store/history.store";
 
 @Component({
   selector: 'atp-mng-car-modal',
@@ -61,7 +62,7 @@ import { first } from "rxjs";
                   </h2>
                 </div>
                 <div class="card__body">
-                  @for(k of store.carSalesKeys(); track k){
+                  @for(k of salesKeys(); track k){
                     <div class="carForm__control">
                       <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
                       @if(k.includes('Comment')){
@@ -88,7 +89,7 @@ import { first } from "rxjs";
                   </h2>
                 </div>
                 <div class="card__body">
-                  @for(k of store.carTechKeys(); track k){
+                  @for(k of techKeys(); track k){
                     <div class="carForm__control">
                       <label class="carForm__control__label" for="{{k}}">{{ store.allColumnsNamesMapper()[k] + ': ' }}</label>
                       @if(k.includes('airConditioning') || k.includes('gps') || k.includes('bluetooth')){
@@ -140,6 +141,7 @@ import { first } from "rxjs";
 export class MngCarModal{
 
   store = inject(CarStore);
+  historyStore = inject(HistoryStore);
   sidebarStore = inject(SidebarStore);
   authService = inject(AuthService);
 
@@ -149,7 +151,32 @@ export class MngCarModal{
 
   keys = this.sidebarStore.carKeys().filter(value => value != 'carId');
 
-  generalKeys = computed(() => this.store.carGeneralKeys().filter(value => value != 'carId'));
+  generalKeys = computed(() => {
+    if(this.store.isAddModalOpen()){
+      return this.store.carGeneralKeys().filter(value => value != 'carId');
+    }
+    else{
+      return this.historyStore.carGeneralKeys();
+    }
+  });
+
+  salesKeys = computed(() => {
+    if(this.store.isAddModalOpen()){
+      return this.store.carSalesKeys();
+    }
+    else{
+      return this.historyStore.carSalesKeys();
+    }
+  });
+
+  techKeys = computed(() => {
+    if(this.store.isAddModalOpen()){
+      return this.store.carTechKeys();
+    }
+    else{
+      return this.historyStore.carTechKeys();
+    }
+  });
 
   form = this.#fb.group({});
 
@@ -182,7 +209,6 @@ export class MngCarModal{
     car = {...car, editedBy: this.user()?.name as string};
     car = {...car, lastUpdateDate: new Date()};
     car = {...car, lockedBy: ' '};
-    console.log('this.store.isAddModalOpen()', this.store.isAddModalOpen());
     if(this.store.isAddModalOpen()){
       this.store.addNewCar(car);
     }

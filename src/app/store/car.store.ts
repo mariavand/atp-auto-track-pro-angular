@@ -137,25 +137,44 @@ export const CarStore = signalStore(
     deleteCar: rxMethod<number>(
       pipe(
         tap(() => patchState(store, { isDeleting: true, error: undefined })),
-        switchMap((carId: number) =>
-          store.http.delete<Car>(environment.apiUrl + '/cars/' + carId).pipe(
+        switchMap((carId: number) => {
+          let concatApis = store.http.delete(environment.apiUrl + '/history/' + carId).pipe(
             first(),
             tapResponse({
-              next: (value) => {
-                patchState(store, (currentState) => ({
-                  cars: [...currentState.cars.filter(car => car.carId != carId)],
-                  isDeleting: false,
-                  error: undefined
-                }));
-                store.closeDeleteModal();
-              },
+              next: () => {},
               error: (err: any) => {
                 console.log('err', err);
                 store.toastr.error('Something went wrong!', err.statusText);
-                patchState(store, { error: err.message, isDeleting: false });
+                patchState(store, { error: err.message });
               }
             })
           )
+
+          return concatApis.pipe(
+            concatMap(() =>
+              store.http.delete<Car>(environment.apiUrl + '/cars/' + carId).pipe(
+                first(),
+                tapResponse({
+                  next: (value) => {
+                    patchState(store, (currentState) => ({
+                      cars: [...currentState.cars.filter(car => car.carId != carId)],
+                      isDeleting: false,
+                      error: undefined
+                    }));
+                    store.closeDeleteModal();
+                  },
+                  error: (err: any) => {
+                    console.log('err', err);
+                    store.toastr.error('Something went wrong!', err.statusText);
+                    patchState(store, { error: err.message, isDeleting: false });
+                  }
+                })
+              )
+            )
+          )
+
+        }
+
         )
       )
     ),
@@ -213,26 +232,6 @@ export const CarStore = signalStore(
         )
       )
     ),
-
-    loadAllHistory: rxMethod<number>(
-      pipe(
-        tap(() => patchState(store, { historyLoading: true, historyError: undefined })),
-        switchMap((carId: number) =>
-          store.http.get<HistoryCollection[]>(environment.apiUrl + '/history/' + carId).pipe(
-            first(),
-            tapResponse({
-              next: (historyCollection: HistoryCollection[]) => patchState(store, { selectedCarHistory: historyCollection, historyLoading: false }),
-              error: (err: any) => {
-                console.log('err', err);
-                store.toastr.error('Something went wrong!', err.statusText);;
-                patchState(store, { historyError: err.message, historyLoading: false })
-              },
-            })
-          )
-        )
-      )
-    ),
-
   })),
   withHooks(({ loadAllCars }) => ({
     onInit: () => {

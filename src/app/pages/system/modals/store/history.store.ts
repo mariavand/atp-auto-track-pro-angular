@@ -67,10 +67,5 @@ export const HistoryStore = signalStore(
       )
     ),
   })),
-  // withHooks(({ loadAllHistory }) => ({
-  //   onInit: () => {
-  //     loadAllHistory();
-  //   }
-  // })),
   withDevtools('history-store')
 )

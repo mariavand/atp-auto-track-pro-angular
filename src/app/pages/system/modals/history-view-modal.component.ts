@@ -30,7 +30,7 @@ import { HistoryStore } from './store/history.store';
 
               <div class="card">
                 <div class="card__header">
-                  <h3 class="justify-between px-1">
+                  <h3 class="justify-between px-1 gap">
                     <span>
                       Edited by: {{ carH.editedBy }}
                     </span>
@@ -40,123 +40,70 @@ import { HistoryStore } from './store/history.store';
                   </h3>
                 </div>
                 <div class="card__body flex-container">
-                  <div class="card">
-                    <div class="card__header">
-                      <h4 class="justify-between px-1">
-                        <span>
-                          General
-                        </span>
-                      </h4>
-                    </div>
-                    <div class="card__body">
-                      <ul class="list">
-                        @for(key of historyStore.carGeneralKeys(); track key){
-                          <li class="list__item">
-                            <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
-                            <span class="list__item__value"
-                              [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }"
-                            >{{ carH[key] }}</span>
-                            @if(carH[key] !== currentCarHStatus[key]){
-                              <span class="teal">
-                                {{ currentCarHStatus[key] }}
-                              </span>
+                  <ul class="list">
+                    @for(key of historyStore.carGeneralKeys(); track key){
+                      @if(carH[key] !== currentCarHStatus[key]){
+                        <li class="list__item">
+                          <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
+                          <span class="list__item__value"
+                            [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }"
+                          >{{ carH[key] }}</span>
+                          <span class="green">
+                            {{ currentCarHStatus[key] }}
+                          </span>
+                        </li>
+                      }
+                    }
+                    @for(key of historyStore.carSalesKeys(); track key){
+                      @if(carH[key] !== currentCarHStatus[key]){
+                        <li class="list__item">
+                          <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
+                          <span class="list__item__value" [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }">
+                            @if(typeof carH[key] === 'boolean'){
+                              {{ carH[key] ? 'Yes' : 'No' }}
                             }
-                          </li>
-                        }
-                        @empty {
-                          <li class="list__item">
-                            No data
-                          </li>
-                        }
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="card">
-                    <div class="card__header">
-                      <h4 class="justify-between px-1">
-                        <span>
-                          Sales
-                        </span>
-                      </h4>
-                    </div>
-                    <div class="card__body">
-                      <ul class="list">
-                        @for(key of historyStore.carSalesKeys(); track key){
-                          <li class="list__item">
-                            <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
-                            <span class="list__item__value" [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }">
-                              @if(typeof carH[key] === 'boolean'){
-                                {{ carH[key] ? 'Yes' : 'No' }}
-                              }
-                              @else if(carStore.isDate(carH[key])){
-                                {{ carH[key] | date:'dd/MM/yy'}}
-                              }
-                              @else if(key == 'transmission'){
-                                {{ carH[key] == 0 ? 'Manual' : 'Automatical' }}
-                              }
-                              @else {
-                                {{ carH[key] }}
-                              }
+                            @else if(carStore.isDate(carH[key])){
+                              {{ carH[key] | date:'dd/MM/yy'}}
+                            }
+                            @else if(key == 'transmission'){
+                              {{ carH[key] == 0 ? 'Manual' : 'Automatical' }}
+                            }
+                            @else {
+                              {{ carH[key] }}
+                            }
+                          </span>
+                            <span class="green">
+                              {{ currentCarHStatus[key] }}
                             </span>
-                            @if(carH[key] !== currentCarHStatus[key]){
-                              <span class="teal">
-                                {{ currentCarHStatus[key] }}
-                              </span>
+                        </li>
+                      }
+                    }
+                    @for(key of historyStore.carTechKeys(); track key){
+                      @if(carH[key] !== currentCarHStatus[key]){
+                        <li class="list__item">
+                          <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
+                          <span class="list__item__value" [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }">
+                            @if(typeof carH[key] === 'boolean'){
+                              {{ carH[key] ? 'Yes' : 'No' }}
                             }
-                          </li>
-                        }
-                        @empty {
-                          <li class="list__item">
-                            No data
-                          </li>
-                        }
-                      </ul>
-                    </div>
-                  </div>
+                            @else if(carStore.isDate(carH[key])){
+                              {{ carH[key] | date:'dd/MM/yy'}}
+                            }
+                            @else if(key == 'transmission'){
+                              {{ carH[key] == 0 ? 'Manual' : 'Automatical' }}
+                            }
+                            @else {
+                              {{ carH[key] }}
+                            }
+                          </span>
 
-                  <div class="card">
-                    <div class="card__header">
-                      <h4 class="justify-between px-1">
-                        <span>
-                          Tech
-                        </span>
-                      </h4>
-                    </div>
-                    <div class="card__body">
-                      <ul class="list">
-                        @for(key of historyStore.carTechKeys(); track key){
-                          <li class="list__item">
-                            <span class="list__item__title">{{ carStore.allColumnsNamesMapper()[key] + ': ' }}</span>
-                            <span class="list__item__value" [ngClass]="{ 'red-crossedout': carH[key] !== currentCarHStatus[key] }">
-                              @if(typeof carH[key] === 'boolean'){
-                                {{ carH[key] ? 'Yes' : 'No' }}
-                              }
-                              @else if(carStore.isDate(carH[key])){
-                                {{ carH[key] | date:'dd/MM/yy'}}
-                              }
-                              @else if(key == 'transmission'){
-                                {{ carH[key] == 0 ? 'Manual' : 'Automatical' }}
-                              }
-                              @else {
-                                {{ carH[key] }}
-                              }
-                            </span>
-                            @if(carH[key] !== currentCarHStatus[key]){
-                              <span class="teal">
-                                {{ currentCarHStatus[key] }}
-                              </span>
-                            }
-                          </li>
-                        }
-                        @empty {
-                          <li class="list__item">
-                            No data
-                          </li>
-                        }
-                      </ul>
-                    </div>
-                  </div>
+                          <span class="green">
+                            {{ currentCarHStatus[key] }}
+                          </span>
+                        </li>
+                      }
+                    }
+                  </ul>
                 </div>
               </div>
             }

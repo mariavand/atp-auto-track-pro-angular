@@ -31,7 +31,7 @@ export function openEditModal(carId: number | undefined): PartialStateUpdater<Ca
 }
 
 export function closeEditModal(): PartialStateUpdater<CarSlice>{
-  return _ => ({ isEditModalOpen: false, selectedCarId: undefined })
+  return _ => ({ isEditModalOpen: false })
 }
 
 export function closeAddModal(): PartialStateUpdater<CarSlice>{

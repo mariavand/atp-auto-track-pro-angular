@@ -26,7 +26,14 @@ import { HistoryStore } from './store/history.store';
           <div class="card__body card__body__scrollable py-1">
             @for(carH of historyStore.selectedCarHistory(); track carH){
 
-              @let currentCarHStatus = $index == historyStore.selectedCarHistory()!.length - 1 ? carStore.vm().selectedCar : historyStore.selectedCarHistory()![$index + 1];
+              @let currentCarHStatus = $index == 0 ? carStore.vm().selectedCar : historyStore.selectedCarHistory()![$index - 1];
+              <span>{{ $index }}</span>
+              <span>{{ historyStore.selectedCarHistory()!.length - 1 }}</span>
+              <span>{{ $index === historyStore.selectedCarHistory()!.length - 1 }}</span>
+              <br/>
+              <span>pio prosfato{{currentCarHStatus | json}} {{ $index }}</span>
+              <br/>
+              <span>paliotero{{carH | json}} {{ $index }}</span>
 
               <div class="card">
                 <div class="card__header">
@@ -130,6 +137,7 @@ export class HistoryViewModalComponent {
 
   constructor(){
     console.log('carStore.vm().selectedCar', this.carStore.vm().selectedCar);
+    console.log('historyStore', this.historyStore.selectedCarHistory());
   }
 
 }

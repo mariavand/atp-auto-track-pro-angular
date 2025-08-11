@@ -30,9 +30,7 @@ export class AuthComponent {
 
   isAuthenticated = toSignal(this.#authService.isAuthenticated$.pipe(
     tap((s) => {
-      console.log('hgdfd');
       if(s){
-        console.log('hgdfdretg');
         this.#router.navigate(['/system']);
       }
     })

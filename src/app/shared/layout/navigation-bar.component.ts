@@ -26,12 +26,12 @@ import { NavigationEnd, Router } from "@angular/router";
         <nav class="navigation__nav">
             <ul class="navigation__list">
               @if(!isAuthenticated()){
-                <li class="navigation__item"><button class="navigation__btn" (click)="this.authService.loginWithRedirect()">Get In!</button></li>
+                <li class="navigation__item"><button class="navigation__btn" (click)="authService.loginWithRedirect()">Get In!</button></li>
               }
               @else {
                 <li class="navigation__item">Welcome, {{ user()?.name }}</li>
                 <!-- <li class="navigation__item"><button class="navigation__btn">My Profile</button></li> -->
-                <li class="navigation__item"><button class="navigation__btn">Logout</button></li>
+                <li class="navigation__item"><button class="navigation__btn" (click)="authService.logout()">Logout</button></li>
               }
             </ul>
         </nav>

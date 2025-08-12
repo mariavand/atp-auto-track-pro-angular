@@ -4,7 +4,7 @@ import { initialCarSlice } from './car.slice';
 import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { Car, History, HistoryCollection } from '../shared/models/car.model';
+import { Car, History } from '../shared/models/car.model';
 import { Router } from '@angular/router';
 import { concatMap, first, of, pipe, switchMap, tap } from 'rxjs';
 import * as updaters from './car.updaters';
@@ -22,11 +22,12 @@ export const CarStore = signalStore(
     const http = inject(HttpClient);
     const sidebarStore = inject(SidebarStore);
     const toastr = inject(ToastrService);
+
     return {
       router,
       http,
       sidebarStore,
-      toastr
+      toastr,
     }
   }),
   withComputed((store) => ({
@@ -232,11 +233,6 @@ export const CarStore = signalStore(
         )
       )
     ),
-  })),
-  withHooks(({ loadAllCars }) => ({
-    onInit: () => {
-      loadAllCars();
-    }
   })),
   withDevtools('cars-store')
 )

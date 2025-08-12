@@ -16,12 +16,17 @@ export const appConfig: ApplicationConfig = {
       domain: 'dev-s0fcza4jc8t1ucnt.eu.auth0.com',
       clientId: 'BDuYiN7T0Qvh1qRAeCJcWYJykZyCXNiI',
       authorizationParams: {
-        redirect_uri: window.location.origin
+        redirect_uri: window.location.origin,
+        audience: 'https://dev-s0fcza4jc8t1ucnt.eu.auth0.com/api/v2/'
       },
       cacheLocation: 'localstorage',
       useRefreshTokens: true,
       httpInterceptor: {
-        allowedList: [environment.apiUrl],
+        allowedList: [
+          {
+            uri: environment.apiUrl + '/*',
+          }
+        ],
       }
     }),
     provideHttpClient(

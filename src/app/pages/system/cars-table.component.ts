@@ -103,7 +103,9 @@ export class CarsTableComponent {
   store = inject(CarStore);
 
   constructor(){
-    this.store.loadAllCars();
+    if(!!this.store.vm().filteredCars){
+      this.store.loadAllCars();
+    }
   }
 
 }

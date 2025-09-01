@@ -1,10 +1,11 @@
 import { Component, inject, output, signal, Signal } from "@angular/core";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { AuthService, User } from "@auth0/auth0-angular";
-import { filter, first, map } from "rxjs";
+import { filter, first, map, tap } from "rxjs";
 import { SidebarComponent } from "./sidebar.component";
 import { SliderSvgComponent } from "../utilities/svgs/slider-svg.component";
 import { NavigationEnd, Router } from "@angular/router";
+import { WebSocketService } from "../services/web-socket.service";
 
 @Component({
   selector: 'atp-navigation-bar',
@@ -48,11 +49,21 @@ import { NavigationEnd, Router } from "@angular/router";
 export class NavigationBarComponent {
 
   authService = inject(AuthService);
+  #wsService = inject(WebSocketService);
   #router = inject(Router);
 
   user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(first()));
 
-  isAuthenticated = toSignal(this.authService.isAuthenticated$.pipe(takeUntilDestroyed()));
+  isAuthenticated = toSignal(
+    this.authService.isAuthenticated$.pipe(
+      takeUntilDestroyed(),
+      tap((s) => {
+        if(s){
+          this.#wsService.connect({ email: 'mariamasha.vandoulaki@gmail.com', locked: false });
+        }
+      })
+    )
+  );
 
   isSidebarOpen = signal(false);
 

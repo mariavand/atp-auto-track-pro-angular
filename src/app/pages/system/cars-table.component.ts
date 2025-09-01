@@ -9,6 +9,9 @@ import { AddSVGComponent } from "../../shared/utilities/svgs/add-svg.component";
 import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component";
 import { MngCarModal } from "./modals/mng-car-modal.component";
 import { DeleteCarModal } from "./modals/delete-car-modal.component";
+import { WebSocketService } from "../../shared/services/web-socket.service";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 
 @Component({
   selector: 'atp-cars-table',
@@ -101,11 +104,22 @@ import { DeleteCarModal } from "./modals/delete-car-modal.component";
 export class CarsTableComponent {
 
   store = inject(CarStore);
+  #wsService = inject(WebSocketService);
+
+  ws = toSignal(
+    this.#wsService.subject.pipe(
+      map((msg: any) => {
+        console.log('msg', msg);
+        return msg;
+      })
+    )
+  );
 
   constructor(){
-    if(!!this.store.vm().filteredCars){
+    if(this.store.vm().filteredCars.length == 0){
       this.store.loadAllCars();
     }
+
   }
 
 }

@@ -13,6 +13,7 @@ import { environment } from '../environments/environment.prod';
 import { buildCarsVm } from './car-vm.builders';
 import { SidebarStore } from '../shared/layout/store/sidebar.store';
 import { ToastrService } from 'ngx-toastr';
+import { WebSocketService } from '../shared/services/web-socket.service';
 
 export const CarStore = signalStore(
   { providedIn: 'root' },
@@ -22,12 +23,14 @@ export const CarStore = signalStore(
     const http = inject(HttpClient);
     const sidebarStore = inject(SidebarStore);
     const toastr = inject(ToastrService);
+    const wsSocket = inject(WebSocketService);
 
     return {
       router,
       http,
       sidebarStore,
       toastr,
+      wsSocket
     }
   }),
   withComputed((store) => ({
@@ -57,11 +60,13 @@ export const CarStore = signalStore(
       patchState(store, updaters.setSelectedCarIdToBeDeleted(id));
     },
 
-    openEditModal(carId: number | undefined) {
+    openEditModal(carId: number) {
+      store.wsSocket.sendToServer('CAR_LOCKED', carId);
       patchState(store, updaters.openEditModal(carId));
     },
 
-    closeEditModal() {
+    closeEditModal(carId: number) {
+      store.wsSocket.sendToServer('CAR_UNLOCKED', carId);
       patchState(store, updaters.closeEditModal());
     },
 
@@ -215,7 +220,7 @@ export const CarStore = signalStore(
                       error: undefined,
                       selectedCarId: editedCar.carId
                     }));
-                    store.closeEditModal();
+                    store.closeEditModal(editedCar.carId);
                   },
                   error: (err: any) => {
                     console.log('err', err);

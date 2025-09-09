@@ -5,8 +5,6 @@ import { filter, first, map, tap } from "rxjs";
 import { SidebarComponent } from "./sidebar.component";
 import { SliderSvgComponent } from "../utilities/svgs/slider-svg.component";
 import { NavigationEnd, Router } from "@angular/router";
-import { WebSocketService } from "../services/web-socket.service";
-
 @Component({
   selector: 'atp-navigation-bar',
   standalone: true,
@@ -49,7 +47,6 @@ import { WebSocketService } from "../services/web-socket.service";
 export class NavigationBarComponent {
 
   authService = inject(AuthService);
-  #wsService = inject(WebSocketService);
   #router = inject(Router);
 
   user: Signal<User | null | undefined> = toSignal(this.authService.user$.pipe(first()));
@@ -57,11 +54,6 @@ export class NavigationBarComponent {
   isAuthenticated = toSignal(
     this.authService.isAuthenticated$.pipe(
       takeUntilDestroyed(),
-      tap((s) => {
-        if(s){
-          this.#wsService.connect({ email: 'mariamasha.vandoulaki@gmail.com', locked: false });
-        }
-      })
     )
   );
 

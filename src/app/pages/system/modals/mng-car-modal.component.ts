@@ -23,7 +23,7 @@ import { HistoryStore } from "./store/history.store";
                 {{ store.isAddModalOpen() ? 'Add New Car' : 'Edit Car'}}
               </span>
               <span>
-                <button class="btn btn__icon btn__brd-light" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal()">
+                <button class="btn btn__icon btn__brd-light" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal(selectedCar().carId)">
                   <atp-close-svg/>
                 </button>
               </span>
@@ -124,7 +124,7 @@ import { HistoryStore } from "./store/history.store";
                     Save
                   </div>
                 </button>
-                <button class="btn__cancel btn__action" type="click" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal()">
+                <button class="btn__cancel btn__action" type="click" (click)="store.isAddModalOpen() ? store.closeAddModal() : store.closeEditModal(selectedCar().carId)">
                   <div class="btn__text-wrapper">
                     Cancel
                   </div>

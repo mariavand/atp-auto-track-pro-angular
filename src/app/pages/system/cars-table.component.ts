@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, effect, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ViewSvgComponent } from "../../shared/utilities/svgs/view-svg.component";
 import { SearchSvgComponent } from "../../shared/utilities/svgs/search-svg.component";
@@ -10,8 +10,9 @@ import { EditSvgComponent } from "../../shared/utilities/svgs/edit-svg.component
 import { MngCarModal } from "./modals/mng-car-modal.component";
 import { DeleteCarModal } from "./modals/delete-car-modal.component";
 import { WebSocketService } from "../../shared/services/web-socket.service";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
+import { wsResponse } from "../../shared/models/web-socket.model";
 
 @Component({
   selector: 'atp-cars-table',
@@ -50,7 +51,7 @@ import { map } from "rxjs";
         </tr>
 
         @for(car of vm.filteredCars; track car){
-          <tr class="table__tr">
+          <tr class="table__tr" [ngClass]="{'table__tr__highlighted': car.lockedBy != ''}">
             <td class="table__td">
               <a class="link btn link__icon" [routerLink]="['car', car.carId]">
                 <atp-view-svg/>
@@ -108,7 +109,8 @@ export class CarsTableComponent {
 
   ws = toSignal(
     this.#wsService.subject.pipe(
-      map((msg: any) => {
+      takeUntilDestroyed(),
+      map((msg: wsResponse) => {
         console.log('msg', msg);
         return msg;
       })
@@ -119,6 +121,13 @@ export class CarsTableComponent {
     if(this.store.vm().filteredCars.length == 0){
       this.store.loadAllCars();
     }
+
+    effect(() => {
+      if(this.ws()?.type == "CAR_LOCKED" || this.ws()?.type == "CAR_UNLOCKED"){
+        console.log('edw')
+        this.store.loadAllCars();
+      }
+    })
 
   }
 
